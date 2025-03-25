@@ -54,21 +54,8 @@ A documentação está dividida em várias seções principais:
 
 ```
 .
-├── README.md                       # Este arquivo
 ├── index.html                      # Página principal com gerenciamento de discos Linux
-├── index2.html                     # Continuação do gerenciamento de discos 
-├── index3.html                     # Seção final de gerenciamento de discos
-├── linux-commands.html             # Documentação de comandos Linux (básicos e avançados)
-├── linux-commands-continuation.html # Continuação de comandos Linux
-├── linux-commands-cybersec.html    # Ferramentas de cybersegurança e scripts
-├── linux-commands-cybersec-final.html # Metasploit, Nmap e outras ferramentas avançadas
-├── linux-commands-final-end.html   # Wireshark, Hydra e finalização
-├── assets/
-│   ├── css/
-│   │   └── styles.css              # Estilos CSS para todas as páginas
-│   └── js/
-│       └── scripts.js              # Código JavaScript para funcionalidades interativas
-└── images/                         # Imagens e ícones utilizados na documentação
+└── README.md                       # Este arquivo
 ```
 
 ## 🔧 Instalação
